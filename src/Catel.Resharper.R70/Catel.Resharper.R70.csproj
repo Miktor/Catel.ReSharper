@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1F90A69D-2838-4263-BDA6-B6983A994D25}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Catel.ReSharper</RootNamespace>
+    <AssemblyName>Catel.ReSharper</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\output\debug\v7.0\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;JET_MODE_ASSERT;R70</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\output\debug\v7.0\Catel.ReSharper.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\output\release\v7.0\</OutputPath>
+    <DefineConstants>TRACE;JET_MODE_ASSERT;R70</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\output\release\v7.0\Catel.ReSharper.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Catel.Core, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Catel.Core.3.4\lib\NET35\Catel.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <None Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Arguments\ArgumentContextActionBase.cs" />
+    <Compile Include="Arguments\Helpers\ArgumentCheckStatementHelper.cs" />
+    <Compile Include="CatelProperties\CSharp\Actions\ExcludePropertyFromSerializationContextAction.cs" />
+    <Compile Include="CatelProperties\CSharp\Actions\FieldContextActionBase.cs" />
+    <Compile Include="CatelProperties\CSharp\Actions\IncludePropertyOnSerializationContextAction.cs" />
+    <Compile Include="CatelProperties\CSharp\Actions\HideModelPropertyContextAction.cs" />
+    <Compile Include="CatelProperties\CSharp\Extensions\PropertyDeclarationExtension.cs" />
+    <Compile Include="CatelProperties\CSharp\Helpers\RegisterPropertyExpressionHelper.cs" />
+    <Compile Include="CatelProperties\CSharp\Actions\RevertToAutoPropertyContextAction.cs" />
+    <Compile Include="Extensions\ITreeNodeExtensions.cs" />
+    <Compile Include="Helpers\TypeHelper.cs" />
+    <Compile Include="Identifiers\CatelMVVM.cs" />
+    <Compile Include="CatelProperties\CSharp\Builders\PropertyDataBuilderBase.cs" />
+    <Compile Include="CatelProperties\CSharp\Builders\ViewModelBaseModelPropertyDataBuilder.cs" />
+    <Compile Include="CatelProperties\CSharp\PropertyConverter.cs" />
+    <Compile Include="CatelProperties\CSharp\Providers\ViewModelBaseModelPropertyProvider.cs" />
+    <Compile Include="CatelProperties\WellKnonwGenerationActionKinds.cs" />
+    <Compile Include="CatelProperties\Providers\ExposeModelPropertyDataItemProvider.cs" />
+    <Compile Include="CatelProperties\Actions\ExposeModelPropertyDataAction.cs" />
+    <Compile Include="CatelProperties\Workflows\ExposeModelPropertyDataWorkflow.cs" />
+    <Compile Include="Extensions\DictionaryWithKeyStringOfListOfTextRangeExtensions.cs" />
+    <Compile Include="Arguments\Helpers\ExceptionXmlDocDetectionHelper.cs" />
+    <Compile Include="Arguments\Helpers\ExceptionXmlDocHelper.cs" />
+    <Compile Include="Arguments\Helpers\ArgumentCheckStatementDetectionHelper.cs" />
+    <Compile Include="Arguments\Patterns\ArgumentCheckStatementDetectionPatterns.cs" />
+    <Compile Include="Arguments\Patterns\ArgumentCheckStatementPatterns.cs" />
+    <Compile Include="Arguments\Patterns\ExceptionXmlDocDectectionPatterns.cs" />
+    <Compile Include="Arguments\ImplementsInterfaceContextAction.cs" />
+    <Compile Include="Arguments\IsMaximumContextAction.cs" />
+    <Compile Include="Arguments\IsMinimalContextAction.cs" />
+    <Compile Include="Arguments\IsNotNullContextAction.cs" />
+    <Compile Include="Arguments\IsNotNullOrEmptyArrayContextAction.cs" />
+    <Compile Include="Arguments\IsNotNullOrEmptyContextAction.cs" />
+    <Compile Include="Arguments\IsNotNullOrWhitespaceContextAction.cs" />
+    <Compile Include="Arguments\IsNotOutOfRangeContextAction.cs" />
+    <Compile Include="Arguments\IsOfTypeContextAction.cs" />
+    <Compile Include="Arguments\Patterns\ExceptionXmlDocPatterns.cs" />
+    <Compile Include="Identifiers\CatelCore.cs" />
+    <Compile Include="CatelProperties\CSharp\Actions\ConvertPropertyContextAction0.cs" />
+    <Compile Include="CatelProperties\CSharp\Actions\ConvertPropertyContextAction1.cs" />
+    <Compile Include="CatelProperties\CSharp\Actions\PropertyContextActionBase.cs" />
+    <Compile Include="CatelProperties\CSharp\Actions\ConvertPropertyContextAction2.cs" />
+    <Compile Include="CatelProperties\CSharp\Extensions\ClassLikeDeclarationExtensions.cs" />
+    <Compile Include="CatelProperties\CSharp\Patterns\ImplementationPatterns.cs" />
+    <Compile Include="CatelProperties\Patterns\NamePatterns.cs" />
+    <Compile Include="CatelProperties\CSharp\Builders\DataObjectBaseOrModelBasePropertyDataBuilder.cs" />
+    <Compile Include="CatelProperties\CSharp\Providers\DataObjectBaseOrModelBasePropertyProvider.cs" />
+    <Compile Include="CatelProperties\CSharp\Patterns\DocumentationPatterns.cs" />
+    <Compile Include="CatelProperties\Actions\GeneratePropertyDataAction.cs" />
+    <Compile Include="CatelProperties\Providers\GeneratePropertyDataItemProvider.cs" />
+    <Compile Include="CatelProperties\Workflows\GeneratePropertyDataWorkflow.cs" />
+    <Compile Include="LoggerListener.cs" />
+    <Compile Include="ModuleInitializer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AboutAction.cs" />
+    <Compile Include="CSharp\ContextActionBase.cs" />
+    <Compile Include="Types\InheritFromModelBaseAction.cs" />
+    <Compile Include="Types\InheritFromActionBase.cs" />
+    <Compile Include="Types\InheritFromDataObjectBaseAction.cs" />
+    <Compile Include="Types\InheritFromViewModelBaseAction.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Actions.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <PropertyGroup>
+    <ReSharperSdkTargets Condition=" '$(ReSharperSdkTargets)' == '' ">$(MSBuildExtensionsPath)\JetBrains\ReSharper.SDK\v7.0</ReSharperSdkTargets>
+  </PropertyGroup>
+  <Import Project="$(ReSharperSdkTargets)\Plugin.Targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="$(ProjectPath)\..\..\Tools\Fody\Fody.targets" />
+</Project>

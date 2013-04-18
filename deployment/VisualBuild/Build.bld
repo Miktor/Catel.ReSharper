@@ -1,0 +1,363 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project version='7' encrypted='1'>
+	<steps type='0'>
+		<step action='Group'>
+			<name>Project steps</name>
+		</step>
+		<step action='Log Message'>
+			<Level type='3'>4</Level>
+			<Message>%PublishType%</Message>
+			<condcomparison type='3'>0</condcomparison>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>1</indent>
+			<name>Prompt for PublishType</name>
+		</step>
+		<step action='Group'>
+			<indent type='3'>1</indent>
+			<name>Setup Build Configuration</name>
+		</step>
+		<step action='Group'>
+			<condcompareto>Official</condcompareto>
+			<condcomparison type='3'>3</condcomparison>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>2</indent>
+			<name>If PublishType is Official</name>
+		</step>
+		<step action='Set Macro'>
+			<MacroName>BuildConfiguration</MacroName>
+			<MacroValue>Release</MacroValue>
+			<condcompareto>Official</condcompareto>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>3</indent>
+			<name>Set BuildConfiguration to Release</name>
+		</step>
+		<step action='Group'>
+			<condcompareto>Official</condcompareto>
+			<condcomparison type='3'>4</condcomparison>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>2</indent>
+			<name>Else</name>
+		</step>
+		<step action='PowerShell'>
+			<CmdStr>(Get-Date).ToString("yyMMddHHmm")</CmdStr>
+			<CmdType type='3'>1</CmdType>
+			<NoInteract type='11'>-1</NoInteract>
+			<NoLogo type='11'>-1</NoLogo>
+			<indent type='3'>3</indent>
+			<name>Print build date time tag</name>
+		</step>
+		<step action='Set Macro'>
+			<MacroName>BuildDateTimeTag</MacroName>
+			<MacroValue>%LASTSTEP_OUTPUT%</MacroValue>
+			<indent type='3'>3</indent>
+			<name>Get build date time tag</name>
+		</step>
+		<step action='Set Macro'>
+			<MacroName>BuildConfiguration</MacroName>
+			<MacroValue>Debug</MacroValue>
+			<condcompareto>Official</condcompareto>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>3</indent>
+			<name>Set BuildConfiguration to Debug</name>
+		</step>
+		<step action='Group'>
+			<indent type='3'>1</indent>
+			<name>Setting up source files</name>
+		</step>
+		<step action='Run Program'>
+			<command>cmd /c copy /Y "%PROJDIR%\..\..\deployment\NSIS\setup.nsi" "%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi"</command>
+			<indent type='3'>2</indent>
+			<name>Copy setup file as %PublishType% setup file</name>
+			<outputfrom type='3'>1</outputfrom>
+			<redirinopt type='3'>2</redirinopt>
+			<redirinstr>copy /y </redirinstr>
+		</step>
+		<step action='Replace in File'>
+			<FileIn>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileIn>
+			<FileOut>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileOut>
+			<Find>(File\s+/r\s+"\.\.\\\.\.\\output\\)[[^\\]]+(\\.+)</Find>
+			<NoModS type='11'>-1</NoModS>
+			<Replace>$1%BuildConfiguration%$2</Replace>
+			<indent type='3'>2</indent>
+			<name>Set files source ..\..\output\%BuildConfiguration%</name>
+		</step>
+		<step action='Group'>
+			<condcomparison type='3'>1</condcomparison>
+			<condexpr>%VersionNumber%</condexpr>
+			<indent type='3'>2</indent>
+			<name>If update version number is required</name>
+		</step>
+		<step action='Process Files'>
+			<FileExtensions>AssemblyInfo.cs</FileExtensions>
+			<FilePath>%PROJDIR%\..\..\src</FilePath>
+			<FileRecurse type='11'>-1</FileRecurse>
+			<HideOn type='11'>-1</HideOn>
+			<SysOn type='11'>-1</SysOn>
+			<condcomparison type='3'>1</condcomparison>
+			<condexpr>%VersionNumber%</condexpr>
+			<indent type='3'>3</indent>
+			<name>Process AssemblyInfo.cs files</name>
+		</step>
+		<step action='Run Program'>
+			<command>cmd /c copy /Y "%PROCFILES_FULLPATH%" "%PROCFILES_FULLPATH%.backup"</command>
+			<indent type='3'>4</indent>
+			<name>Create backup of AssemblyInfo.cs</name>
+			<outputfrom type='3'>1</outputfrom>
+			<redirinopt type='3'>2</redirinopt>
+			<redirinstr>copy /y </redirinstr>
+		</step>
+		<step action='Replace in File'>
+			<FileIn>%PROCFILES_FULLPATH%</FileIn>
+			<FileOut>%PROCFILES_FULLPATH%</FileOut>
+			<Find>(\[[assembly:\s+AssemblyVersion\()"[[^)]]+(\)\]])</Find>
+			<NoModS type='11'>-1</NoModS>
+			<Replace>$1"%VersionNumber%"$2</Replace>
+			<indent type='3'>4</indent>
+			<name>Update AssemblyVersion</name>
+		</step>
+		<step action='Replace in File'>
+			<FileIn>%PROCFILES_FULLPATH%</FileIn>
+			<FileOut>%PROCFILES_FULLPATH%</FileOut>
+			<Find>(\[[assembly:\s+AssemblyInformationalVersion\()"[[^)]]+(\)\]])</Find>
+			<NoModS type='11'>-1</NoModS>
+			<Replace>$1"%VersionNumber%"$2</Replace>
+			<indent type='3'>4</indent>
+			<name>Update AssemblyInformationalVersion</name>
+		</step>
+		<step action='Replace in File'>
+			<FileIn>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileIn>
+			<FileOut>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileOut>
+			<Find>1.0.0.0</Find>
+			<NoModS type='11'>-1</NoModS>
+			<Replace>%VersionNumber%</Replace>
+			<indent type='3'>3</indent>
+			<name>Update setup Version</name>
+		</step>
+		<step action='Replace in File'>
+			<FileIn>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileIn>
+			<FileOut>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileOut>
+			<Find><![CDATA[(\s+!define\s+VERSION)\s+(.+)
+]]></Find>
+			<NoModS type='11'>-1</NoModS>
+			<Replace>$1 %VersionNumber%\n</Replace>
+			<checked type='11'>0</checked>
+			<indent type='3'>3</indent>
+			<name>Update setup Version</name>
+		</step>
+		<step action='Replace in File'>
+			<FileIn>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileIn>
+			<FileOut>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileOut>
+			<Find><![CDATA[(\s+VIProductVersion)\s+(.+)
+]]></Find>
+			<NoModS type='11'>-1</NoModS>
+			<Replace>$1 %VersionNumber%\n</Replace>
+			<checked type='11'>0</checked>
+			<indent type='3'>3</indent>
+			<name>Update setup VIProductVersion</name>
+		</step>
+		<step action='Group'>
+			<condcomparison type='3'>1</condcomparison>
+			<condexpr>%VersionNumber%</condexpr>
+			<indent type='3'>2</indent>
+			<name>Set Welcome/Finish wizard page left image</name>
+		</step>
+		<step action='Group'>
+			<condcompareto>Official</condcompareto>
+			<condcomparison type='3'>3</condcomparison>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>3</indent>
+			<name>If PublishType is Official</name>
+		</step>
+		<step action='Replace in File'>
+			<FileIn>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileIn>
+			<FileOut>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileOut>
+			<Find>(!define\s+MUI_(UN)?WELCOMEFINISHPAGE_BITMAP\s+")[[^"]]+(")</Find>
+			<NoModS type='11'>-1</NoModS>
+			<Replace>$1..\\InnoSetup\\template\\resources\\logo_large.bmp$3</Replace>
+			<condcompareto>Official</condcompareto>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>4</indent>
+			<name>Set Official Logo</name>
+		</step>
+		<step action='Group'>
+			<condcompareto>Beta</condcompareto>
+			<condcomparison type='3'>3</condcomparison>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>3</indent>
+			<name>Else If PublishType is Beta</name>
+		</step>
+		<step action='Replace in File'>
+			<FileIn>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileIn>
+			<FileOut>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileOut>
+			<Find>(!define\s+MUI_(UN)?WELCOMEFINISHPAGE_BITMAP\s+")[[^"]]+(")</Find>
+			<NoModS type='11'>-1</NoModS>
+			<Replace>$1..\\InnoSetup\\template\\resources\\logo_large_beta.bmp$3</Replace>
+			<condcompareto>Beta</condcompareto>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>4</indent>
+			<name>Set Beta Logo</name>
+		</step>
+		<step action='Group'>
+			<condcompareto>Nightly</condcompareto>
+			<condcomparison type='3'>3</condcomparison>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>3</indent>
+			<name>Else If PublishType is Nightly</name>
+		</step>
+		<step action='Replace in File'>
+			<FileIn>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileIn>
+			<FileOut>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileOut>
+			<Find>(!define\s+MUI_(UN)?WELCOMEFINISHPAGE_BITMAP\s+")[[^"]]+(")</Find>
+			<NoModS type='11'>-1</NoModS>
+			<Replace>$1..\\InnoSetup\\template\\resources\\logo_large_nightly.bmp$3</Replace>
+			<condcompareto>Nightly</condcompareto>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>4</indent>
+			<name>Set Nightly Logo</name>
+		</step>
+		<step action='Group'>
+			<condcompareto>RC</condcompareto>
+			<condcomparison type='3'>3</condcomparison>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>3</indent>
+			<name>Else If PublishType is RC</name>
+		</step>
+		<step action='Replace in File'>
+			<FileIn>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileIn>
+			<FileOut>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileOut>
+			<Find>(!define\s+MUI_(UN)?WELCOMEFINISHPAGE_BITMAP\s+")[[^"]]+(")</Find>
+			<NoModS type='11'>-1</NoModS>
+			<Replace>$1..\\InnoSetup\\template\\resources\\logo_large_RC.bmp$3</Replace>
+			<condcompareto>RC</condcompareto>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>4</indent>
+			<name>Set RC Logo</name>
+		</step>
+		<step action='Delete Folder'>
+			<Path>%PROJDIR%\..\..\output\%BuildConfiguration%</Path>
+			<Recurse type='11'>-1</Recurse>
+			<indent type='3'>2</indent>
+			<name>Clean output directory</name>
+		</step>
+		<step action='MSBuild'>
+			<Options>/nologo /p:Configuration=%BuildConfiguration%</Options>
+			<ProjectFile>%PROJDIR%\..\..\src\Catel.Resharper.sln</ProjectFile>
+			<Targets array='0'>Build</Targets>
+			<indent type='3'>1</indent>
+			<name>Build Catel.ReSharper solution</name>
+		</step>
+		<step action='NSIS'>
+			<Filename>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</Filename>
+			<Verbosity type='3'>3</Verbosity>
+			<indent type='3'>1</indent>
+			<name>Build Catel.ReSharper setup</name>
+		</step>
+		<step action='Copy Files'>
+			<Converted type='11'>-1</Converted>
+			<Delay>15</Delay>
+			<DestDir>%PROJDIR%\..\..\output\setup</DestDir>
+			<Ext>setup.exe</Ext>
+			<Incremental type='11'>-1</Incremental>
+			<LogCopied type='11'>-1</LogCopied>
+			<ReadOnly type='11'>-1</ReadOnly>
+			<Retries>10</Retries>
+			<SourceDir>%PROJDIR%\..\..\deployment\NSIS\</SourceDir>
+			<TBD type='11'>-1</TBD>
+			<indent type='3'>1</indent>
+			<name>Copy Catel.ReSharper setup to output directory</name>
+		</step>
+		<step action='Group'>
+			<condcomparison type='3'>1</condcomparison>
+			<condexpr>%VersionNumber%</condexpr>
+			<indent type='3'>1</indent>
+			<name>If version number was updated</name>
+		</step>
+		<step action='Rename Files'>
+			<Dir>%PROJDIR%\..\..\src</Dir>
+			<Ext>*.backup</Ext>
+			<Find>(.+).backup</Find>
+			<FirstOnly type='11'>-1</FirstOnly>
+			<HideOn type='11'>-1</HideOn>
+			<LogRenamed type='11'>-1</LogRenamed>
+			<Overwrite type='11'>-1</Overwrite>
+			<Recurse type='11'>-1</Recurse>
+			<Replace>$1</Replace>
+			<SysOn type='11'>-1</SysOn>
+			<condexpr>%VersionNumber%</condexpr>
+			<indent type='3'>2</indent>
+			<name>Restore backup files</name>
+		</step>
+		<step action='Rename Files'>
+			<Dir>%PROJDIR%\..\..\output\setup</Dir>
+			<Ext>setup.exe</Ext>
+			<Find>setup.exe</Find>
+			<FirstOnly type='11'>-1</FirstOnly>
+			<HideOn type='11'>-1</HideOn>
+			<LogRenamed type='11'>-1</LogRenamed>
+			<Overwrite type='11'>-1</Overwrite>
+			<Replace>setup-v%VersionNumber%.exe</Replace>
+			<SysOn type='11'>-1</SysOn>
+			<indent type='3'>2</indent>
+			<name>Rename setup file name</name>
+		</step>
+		<step action='Group'>
+			<condcompareto>Beta</condcompareto>
+			<condcomparison type='3'>3</condcomparison>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>1</indent>
+			<name>If PublishType is Beta</name>
+		</step>
+		<step action='Rename Files'>
+			<Dir>%PROJDIR%\..\..\output\setup</Dir>
+			<Ext>setup-v%VersionNumber%.exe</Ext>
+			<Find>(setup-v%VersionNumber%)(.exe)</Find>
+			<FirstOnly type='11'>-1</FirstOnly>
+			<HideOn type='11'>-1</HideOn>
+			<LogRenamed type='11'>-1</LogRenamed>
+			<Overwrite type='11'>-1</Overwrite>
+			<Replace>$1-Beta-%BuildDateTimeTag%$2</Replace>
+			<SysOn type='11'>-1</SysOn>
+			<indent type='3'>2</indent>
+			<name>Rename setup file name as Beta</name>
+		</step>
+		<step action='Group'>
+			<condcompareto>Nightly</condcompareto>
+			<condcomparison type='3'>3</condcomparison>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>1</indent>
+			<name>Else If PublishType is Nightly</name>
+		</step>
+		<step action='Rename Files'>
+			<Dir>%PROJDIR%\..\..\output\setup</Dir>
+			<Ext>setup-v%VersionNumber%.exe</Ext>
+			<Find>(setup-v%VersionNumber%)(.exe)</Find>
+			<FirstOnly type='11'>-1</FirstOnly>
+			<HideOn type='11'>-1</HideOn>
+			<LogRenamed type='11'>-1</LogRenamed>
+			<Overwrite type='11'>-1</Overwrite>
+			<Replace>$1-Nightly-%BuildDateTimeTag%$2</Replace>
+			<SysOn type='11'>-1</SysOn>
+			<indent type='3'>2</indent>
+			<name>Rename setup file name as Nightly</name>
+		</step>
+		<step action='Group'>
+			<condcompareto>RC</condcompareto>
+			<condcomparison type='3'>3</condcomparison>
+			<condexpr>%PublishType%</condexpr>
+			<indent type='3'>1</indent>
+			<name>Else If PublishType is RC</name>
+		</step>
+		<step action='Rename Files'>
+			<Dir>%PROJDIR%\..\..\output\setup</Dir>
+			<Ext>setup-v%VersionNumber%.exe</Ext>
+			<Find>(setup-v%VersionNumber%)(.exe)</Find>
+			<FirstOnly type='11'>-1</FirstOnly>
+			<HideOn type='11'>-1</HideOn>
+			<LogRenamed type='11'>-1</LogRenamed>
+			<Overwrite type='11'>-1</Overwrite>
+			<Replace>$1-RC-%BuildDateTimeTag%$2</Replace>
+			<SysOn type='11'>-1</SysOn>
+			<indent type='3'>2</indent>
+			<name>Rename setup file name as RC</name>
+		</step></steps>
+</project>

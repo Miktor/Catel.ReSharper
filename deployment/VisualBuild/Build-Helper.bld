@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project version='7' encrypted='1'>
+	<steps type='0'>
+		<step action='Group'>
+			<name>Project steps</name>
+		</step>
+		<step action='Mercurial'>
+			<Command>log</Command>
+			<Noninteractive type='11'>-1</Noninteractive>
+			<Options>--limit 1</Options>
+			<WorkDir>%PROJDIR%\..\..</WorkDir>
+			<indent type='3'>1</indent>
+			<name>Log top most revision</name>
+		</step>
+		<step action='Run Script'>
+			<Language>VBScript</Language>
+			<Script><![CDATA[Set output = Application.Macros(vbldSystem).Item("LASTSTEP_OUTPUT")
+Set revisionNumber = vbld_TempMacros.Add("REVISION_NUMBER", Left(Mid(output, 14), InStr(Mid(output, 14), ":") - 1))
+
+
+]]></Script>
+			<indent type='3'>1</indent>
+			<name>Retrive revision number from log output</name>
+		</step>
+		<step action='Log Message'>
+			<Level type='3'>4</Level>
+			<Message>%VERSION_NUMBER%</Message>
+			<description>The version number must match with the following format: MajorVersion.MinorVersion.BuildNumber</description>
+			<indent type='3'>1</indent>
+			<name>Prompt major version number</name>
+		</step>
+		<step action='Set Macro'>
+			<MacroName>FULL_VERSION_NUMBER</MacroName>
+			<MacroValue>%VERSION_NUMBER%.%REVISION_NUMBER%</MacroValue>
+			<indent type='3'>1</indent>
+			<name>Compute version number</name>
+		</step>
+		<step action='Group'>
+			<indent type='3'>1</indent>
+			<name>Build Options</name>
+		</step>
+		<step action='VisBuildPro Project'>
+			<OpenFailGUI type='11'>-1</OpenFailGUI>
+			<ParamValues array='0'>Nightly</ParamValues>
+			<ParamValues>%FULL_VERSION_NUMBER%</ParamValues>
+			<Parameters array='0'>PublishType</Parameters>
+			<Parameters>VersionNumber</Parameters>
+			<ProjectName>%PROJDIR%\Build.bld</ProjectName>
+			<checked type='11'>0</checked>
+			<indent type='3'>2</indent>
+			<name>Build Nightly</name>
+		</step>
+		<step action='VisBuildPro Project'>
+			<OpenFailGUI type='11'>-1</OpenFailGUI>
+			<ParamValues array='0'>Beta</ParamValues>
+			<ParamValues>%FULL_VERSION_NUMBER%</ParamValues>
+			<Parameters array='0'>PublishType</Parameters>
+			<Parameters>VersionNumber</Parameters>
+			<ProjectName>%PROJDIR%\Build.bld</ProjectName>
+			<checked type='11'>0</checked>
+			<indent type='3'>2</indent>
+			<name>Build Beta</name>
+		</step>
+		<step action='VisBuildPro Project'>
+			<OpenFailGUI type='11'>-1</OpenFailGUI>
+			<ParamValues array='0'>RC</ParamValues>
+			<ParamValues>%FULL_VERSION_NUMBER%</ParamValues>
+			<Parameters array='0'>PublishType</Parameters>
+			<Parameters>VersionNumber</Parameters>
+			<ProjectName>%PROJDIR%\Build.bld</ProjectName>
+			<checked type='11'>0</checked>
+			<indent type='3'>2</indent>
+			<name>Build RC</name>
+		</step>
+		<step action='VisBuildPro Project'>
+			<OpenFailGUI type='11'>-1</OpenFailGUI>
+			<ParamValues array='0'>Official</ParamValues>
+			<ParamValues>%FULL_VERSION_NUMBER%</ParamValues>
+			<Parameters array='0'>PublishType</Parameters>
+			<Parameters>VersionNumber</Parameters>
+			<ProjectName>%PROJDIR%\Build.bld</ProjectName>
+			<indent type='3'>2</indent>
+			<name>Build Official</name>
+		</step></steps>
+</project>

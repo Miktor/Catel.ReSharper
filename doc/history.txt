@@ -1,0 +1,74 @@
+Catel.Resharper history
+=======================
+
+(+) Added
+(*) Changed
+(-) Removed
+(x) Error / bug (fix)
+
+For more information about issues or new feature requests, please visit:
+
+http://catelresharper.codeplex.com
+
+Documentation can be found at: http://catel.catenalogic.com
+
+**********************************************************
+===========
+Version 1.3
+===========
+
+Added/fixed:
+============
+
+(+) Added support for R# 7.1
+(+) Added support to Catel 3.4 for to convert auto properties into catel properties from ModelBase.
+(*) PropertyConverter now generates a the members name (property and notification method) to avoid the usage of existing member name.
+(*) Built on top of Catel 3.4.
+(x) Fixed reference to Actions.xml resource file.
+
+===========
+Version 1.2
+===========
+
+Added/fixed:
+============
+
+(+) Added support for R# 6.1 (powered by Caitlyn)
+(+) Improved coding workflow adding actions like "Revert to auto property", "Hide model property", "Include property on serialization", "Exclude property from serialization"
+(+) Added an option on generate property dialog to choose the inclusion of the property on serialization.
+(+) Exposed properties could be generated with options to implements property change notification and/or forward event argument to implemented property change notification.
+(+) Added support to generate action to expose model properties as view model ones.
+(+) Introduced dependency of Catel.Core.
+(*) Generation dialog option never persit
+(*) Updated generation dialog option default values
+(*) Avoid the usage of obsolete property LiveTemplatesManager.Instance, now the LiveTemplatesManager is resolved through Shell.Instance.GetComponent<LiveTemplatesManager>() call
+(x) The setup now read the ReSharper install dir from the registry
+(x) Inherit from DataObjectBase or from ViewModelBase action is only available if the selected class is non-static.
+
+===========
+Version 1.1
+===========
+
+Added/fixed:
+============
+
+(+) Added support to version 7.0 of ReSharper.
+(-) Removed support to version 6.1 of ReSharper.
+(*) Removed the awkward space character resulting of the over-react of the editor when 'typeof' operator is used 
+    during a argument check generation session (see: IfOfType or ImplementsInterface actions).
+
+===========
+Version 1.0
+===========
+
+Added/fixed:
+============
+(+) Implemented argument check context action IsNotNullOrWhitespace.
+(+) Implemented argument check context actions such as IsMaximum, IsMinimal, IsNotOutOfRange, IsOfType and ImplementsInterface.
+(+) Implemented argument check context actions such as IsNotNulll, IsNotNullOrEmptyArray and IsNotNullOrEmpty.
+(+) Added context actions that allow convert an auto property "To catel property",
+    "To catel property with property chaged notification method" and
+    "To Catel property with property changed notification method and event argument forwarded".
+(+) Allow generate catel property data of auto properties with property change
+    notification method into classes thats inherits from Catel.Data.DataObjectBase,
+    forwarding the property changed event argument to the notification method.

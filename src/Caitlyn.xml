@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration xmlns:ctl="http://catel.codeplex.com">
+  <RootProjects xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn.Models" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+    <d1p1:RootProject>
+      <Name>Catel.Resharper.R70</Name>
+      <Rules xmlns:i="http://www.w3.org/2001/XMLSchema-instance" />
+    </d1p1:RootProject>
+  </RootProjects>
+  <ProjectMappings xmlns:d1p1="http://schemas.datacontract.org/2004/07/Caitlyn.Models" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+    <d1p1:ProjectMapping>
+      <SourceProject>Catel.Resharper.R70</SourceProject>
+      <TargetProject>Catel.Resharper.R61</TargetProject>
+    </d1p1:ProjectMapping>  
+    <d1p1:ProjectMapping>
+      <SourceProject>Catel.Resharper.R70</SourceProject>
+      <TargetProject>Catel.Resharper.R71</TargetProject>
+    </d1p1:ProjectMapping>  
+   </ProjectMappings>
+</Configuration>

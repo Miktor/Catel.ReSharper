@@ -1,0 +1,7 @@
+Catel.Resharper requirements
+============================
+
+To build this, you will need the following stuff installed:
+
+* NuGet (see http://www.nuget.org)
+* Resharper SDK
