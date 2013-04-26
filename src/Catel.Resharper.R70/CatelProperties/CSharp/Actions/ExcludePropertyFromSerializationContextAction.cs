@@ -1,7 +1,10 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ExcludePropertyFromSerializationContextAction.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
+// <summary>
+//   The remove property context action.
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel.ReSharper.CatelProperties.CSharp.Actions
 {
@@ -67,10 +70,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Actions
         /// </summary>
         public override string Text
         {
-            get
-            {
-                return "Exclude from serialization";
-            }
+            get { return "Exclude from serialization"; }
         }
 
         #endregion
@@ -91,39 +91,30 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Actions
         /// </returns>
         protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
         {
-            if (this.invocationExpression.ArgumentList.Arguments.Count == 5)
+            if (this.invocationExpression.ArgumentList.Arguments.Count == 4)
             {
-                this.invocationExpression.RemoveArgument(this.invocationExpression.ArgumentList.Arguments[4]);
-                ICSharpArgument argument = this.Provider.ElementFactory.CreateArgument(
-                    ParameterKind.VALUE, this.Provider.ElementFactory.CreateExpression("false"));
-                this.invocationExpression.AddArgumentAfter(
-                    argument, this.invocationExpression.ArgumentList.Arguments[3]);
+                this.invocationExpression.RemoveArgument(this.invocationExpression.ArgumentList.Arguments[3]);
+                ICSharpArgument argument = this.Provider.ElementFactory.CreateArgument(ParameterKind.VALUE, this.Provider.ElementFactory.CreateExpression("false"));
+                this.invocationExpression.AddArgumentAfter(argument, this.invocationExpression.ArgumentList.Arguments[2]);
             }
             else
             {
+                if (this.invocationExpression.ArgumentList.Arguments.Count == 1)
+                {
+                    ICSharpArgument argument = this.Provider.ElementFactory.CreateArgument(ParameterKind.VALUE, this.Provider.ElementFactory.CreateExpression("default($0)", this.PropertyDeclaration.Type));
+                    this.invocationExpression.AddArgumentAfter(argument, this.invocationExpression.ArgumentList.Arguments[0]);
+                }
+
                 if (this.invocationExpression.ArgumentList.Arguments.Count == 2)
                 {
-                    ICSharpArgument argument = this.Provider.ElementFactory.CreateArgument(
-                        ParameterKind.VALUE, 
-                        this.Provider.ElementFactory.CreateExpression("default($0)", this.PropertyDeclaration.Type));
-                    this.invocationExpression.AddArgumentAfter(
-                        argument, this.invocationExpression.ArgumentList.Arguments[1]);
+                    ICSharpArgument argument = this.Provider.ElementFactory.CreateArgument(ParameterKind.VALUE, this.Provider.ElementFactory.CreateExpression("null"));
+                    this.invocationExpression.AddArgumentAfter(argument, this.invocationExpression.ArgumentList.Arguments[1]);
                 }
 
                 if (this.invocationExpression.ArgumentList.Arguments.Count == 3)
                 {
-                    ICSharpArgument argument = this.Provider.ElementFactory.CreateArgument(
-                        ParameterKind.VALUE, this.Provider.ElementFactory.CreateExpression("null"));
-                    this.invocationExpression.AddArgumentAfter(
-                        argument, this.invocationExpression.ArgumentList.Arguments[2]);
-                }
-
-                if (this.invocationExpression.ArgumentList.Arguments.Count == 4)
-                {
-                    ICSharpArgument argument = this.Provider.ElementFactory.CreateArgument(
-                        ParameterKind.VALUE, this.Provider.ElementFactory.CreateExpression("false"));
-                    this.invocationExpression.AddArgumentAfter(
-                        argument, this.invocationExpression.ArgumentList.Arguments[3]);
+                    ICSharpArgument argument = this.Provider.ElementFactory.CreateArgument(ParameterKind.VALUE, this.Provider.ElementFactory.CreateExpression("false"));
+                    this.invocationExpression.AddArgumentAfter(argument, this.invocationExpression.ArgumentList.Arguments[2]);
                 }
             }
 
@@ -145,11 +136,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Actions
                 this.invocationExpression = expressionInitializer.Value as IInvocationExpression;
             }
 
-            return this.invocationExpression != null
-                   && (this.invocationExpression.ArgumentList.Arguments.Count < 5
-                       || ((this.invocationExpression.ArgumentList.Arguments[4].Value is ICSharpLiteralExpression)
-                           && (this.invocationExpression.ArgumentList.Arguments[4].Value as ICSharpLiteralExpression)
-                                  .Literal.GetTokenType() == CSharpTokenType.TRUE_KEYWORD));
+            return this.invocationExpression != null && (this.invocationExpression.ArgumentList.Arguments.Count < 4 || ((this.invocationExpression.ArgumentList.Arguments[3].Value is ICSharpLiteralExpression) && (this.invocationExpression.ArgumentList.Arguments[3].Value as ICSharpLiteralExpression).Literal.GetTokenType() == CSharpTokenType.TRUE_KEYWORD));
         }
 
         #endregion

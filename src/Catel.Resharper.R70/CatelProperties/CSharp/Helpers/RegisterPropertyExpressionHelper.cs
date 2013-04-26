@@ -1,8 +1,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RegisterPropertyExpressionHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Catel.ReSharper.CatelProperties.CSharp.Helpers
 {
     using System.Linq;
@@ -38,27 +39,33 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Helpers
         /// <returns>
         /// The JetBrains.ReSharper.Psi.CSharp.Tree.IPropertyDeclaration.
         /// </returns>
-        public static IPropertyDeclaration GetPropertyDeclaration(
-            IClassDeclaration classDeclaration, IInvocationExpression invocationExpression)
+        public static IPropertyDeclaration GetPropertyDeclaration(IClassDeclaration classDeclaration, IInvocationExpression invocationExpression)
         {
             IPropertyDeclaration propertyDeclaration = null;
             if (invocationExpression.ArgumentList.Arguments.Count >= 1)
             {
+                string propertyName = null;
                 ICSharpArgument argument = invocationExpression.ArgumentList.Arguments[0];
-                if (argument.Value != null && argument.Value.ConstantValue != null)
+                if (argument.Value is ILambdaExpression)
                 {
-                    string propertyName = argument.Value.ConstantValue.Value.ToString();
-                    if (classDeclaration.DeclaredElement != null)
+                    var lambdaExpression = argument.Value as ILambdaExpression;
+                    var referenceExpression = lambdaExpression.BodyExpression as IReferenceExpression;
+                    if (referenceExpression != null)
                     {
-                        IProperty firstOrDefault =
-                            (from member in classDeclaration.DeclaredElement.GetMembers().OfType<IProperty>()
-                             where member.ShortName == propertyName
-                             select member).FirstOrDefault();
-                        if (firstOrDefault != null)
-                        {
-                            propertyDeclaration =
-                                (IPropertyDeclaration)firstOrDefault.GetDeclarations().FirstOrDefault();
-                        }
+                        propertyName = referenceExpression.NameIdentifier.Name;
+                    }
+                }
+                else if (argument.Value != null && argument.Value.ConstantValue != null)
+                {
+                    propertyName = argument.Value.ConstantValue.Value.ToString();
+                }
+
+                if (!string.IsNullOrEmpty(propertyName) && classDeclaration.DeclaredElement != null)
+                {
+                    IProperty property = (from member in classDeclaration.DeclaredElement.GetMembers().OfType<IProperty>() where member.ShortName == propertyName select member).FirstOrDefault();
+                    if (property != null)
+                    {
+                        propertyDeclaration = (IPropertyDeclaration)property.GetDeclarations().FirstOrDefault();
                     }
                 }
             }

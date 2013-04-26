@@ -97,14 +97,10 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Actions
                                 var invocationExpression = expressionInitializer.Value as IInvocationExpression;
                                 if (invocationExpression.InvokedExpression is IReferenceExpression)
                                 {
-                                    var referenceExpression =
-                                        invocationExpression.InvokedExpression as IReferenceExpression;
-                                    if (referenceExpression.NameIdentifier != null
-                                        && referenceExpression.NameIdentifier.GetText() == RegisterPropertyExpressionHelper.RegisterPropertyMethodName)
+                                    var referenceExpression = invocationExpression.InvokedExpression as IReferenceExpression;
+                                    if (referenceExpression.NameIdentifier != null && referenceExpression.NameIdentifier.GetText() == RegisterPropertyExpressionHelper.RegisterPropertyMethodName)
                                     {
-                                        this.PropertyDeclaration =
-                                            RegisterPropertyExpressionHelper.GetPropertyDeclaration(
-                                                this.ClassDeclaration, invocationExpression);
+                                        this.PropertyDeclaration = RegisterPropertyExpressionHelper.GetPropertyDeclaration(this.ClassDeclaration, invocationExpression);
                                     }
                                 }
                             }

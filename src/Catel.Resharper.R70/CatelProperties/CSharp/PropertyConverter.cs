@@ -242,7 +242,8 @@ namespace Catel.ReSharper.CatelProperties.CSharp
                         ImplementationPatterns.PropertyData, 
                         propertyName, 
                         propertyDeclaration.DeclaredElement.Type, 
-                        propertyDataType.GetTypeElement());
+                        propertyDataType.GetTypeElement(),
+                        this.classDeclaration.DeclaredName);
             }
             else
             {
@@ -252,7 +253,8 @@ namespace Catel.ReSharper.CatelProperties.CSharp
                         ImplementationPatterns.PropertyDataNonSerialized, 
                         propertyName, 
                         propertyDeclaration.DeclaredElement.Type, 
-                        propertyDataType.GetTypeElement());
+                        propertyDataType.GetTypeElement(),
+                        this.classDeclaration.DeclaredName);
             }
 
             // context.PutMemberDeclaration(propertyDataMemberDeclaration, null, declaration => new GeneratorDeclarationElement(declaration));

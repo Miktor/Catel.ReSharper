@@ -1,8 +1,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ImplementationPatterns.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Catel.ReSharper.CatelProperties.CSharp.Patterns
 {
     /// <summary>
@@ -26,22 +27,22 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Patterns
         /// <summary>
         ///  Property data member declaration pattern
         /// </summary>
-        public const string PropertyData = "public static readonly $2 $0Property = RegisterProperty(\"$0\", typeof($1));";
+        public const string PropertyData = "public static readonly $2 $0Property = RegisterProperty<$3, $1>(model => model.$0);";
 
         /// <summary>
         ///  Property data non serialized member declaration pattern
         /// </summary>
-        public const string PropertyDataNonSerialized = "public static readonly $2 $0Property = RegisterProperty(\"$0\", typeof($1), default($1), null, false);";
+        public const string PropertyDataNonSerialized = "public static readonly $2 $0Property = RegisterProperty<$3, $1>(model => model.$0, default($1), null, false);";
 
         /// <summary>
         ///  Property data member plus notification method declaration pattern
         /// </summary>
-        public const string PropertyDataPlusNotificationMethod = "public static readonly $4 $1 = RegisterProperty(\"$0\", typeof($2), default($2), (s, e) => (($3)s).$5());";
+        public const string PropertyDataPlusNotificationMethod = "public static readonly $4 $1 = RegisterProperty<$3, $2>(model => model.$0, default($2), (s, e) => s.$5());";
 
         /// <summary>
         ///  Property data member plus notification method relaying event argument declaration pattern
         /// </summary>
-        public const string PropertyDataWithNotificationMethodForwardingEventArgument = "public static readonly $4 $1 = RegisterProperty(\"$0\", typeof($2), default($2), (s, e) => (($3)s).$5(e));";
+        public const string PropertyDataWithNotificationMethodForwardingEventArgument = "public static readonly $4 $1 = RegisterProperty<$3, $2>(model => model.$0, default($2), (s, e) => s.$5(e));";
 
         /// <summary>
         /// The set accessor body pattern
@@ -61,11 +62,11 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Patterns
         /// <summary>
         ///  Property data non serialized member plus notification method relaying event argument declaration pattern
         /// </summary>
-        public const string PropertyDataNonSerializedWithNotificationMethodForwardingEventArgument = "public static readonly $4 $1 = RegisterProperty(\"$0\", typeof($2), default($2), (s, e) => (($3)s).$5(e), false);";
+        public const string PropertyDataNonSerializedWithNotificationMethodForwardingEventArgument = "public static readonly $4 $1 = RegisterProperty<$3, $2>(model => model.$0, default($2), (s, e) => s.$5(e), false);";
 
         /// <summary>
         ///  Property data non serialized member plus notification method declaration pattern
         /// </summary>
-        public const string PropertyDataNonSerializedPlusNotificationMethod = "public static readonly $4 $1 = RegisterProperty(\"$0\", typeof($2), default($2), (s, e) => (($3)s).$5(), false);";
+        public const string PropertyDataNonSerializedPlusNotificationMethod = "public static readonly $4 $1 = RegisterProperty<$3, $2>(model => model.$0, default($2), (s, e) => s.$5(), false);";
     }
 }

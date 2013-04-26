@@ -124,9 +124,9 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Builders
                     if (propertyName != modelProperty.ShortName)
                     {
 #if R80
-                        fixedArguments.Add(new AttributeValue(ClrConstantValueFactory.CreateStringValue(model.ShortName, context.PsiModule, context.Anchor.GetResolveContext())));
+                        fixedArguments.Add(new AttributeValue(ClrConstantValueFactory.CreateStringValue(modelProperty.ShortName, context.PsiModule, context.Anchor.GetResolveContext())));
 #else
-                        fixedArguments.Add(new AttributeValue(ClrConstantValueFactory.CreateStringValue(model.ShortName, context.PsiModule)));
+                        fixedArguments.Add(new AttributeValue(ClrConstantValueFactory.CreateStringValue(modelProperty.ShortName, context.PsiModule)));
 #endif
                     }
 

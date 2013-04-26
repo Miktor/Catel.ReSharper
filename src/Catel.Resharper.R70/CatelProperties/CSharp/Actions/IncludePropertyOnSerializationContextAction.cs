@@ -90,16 +90,16 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Actions
         /// </returns>
         protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
         {
-            if (this.invocationExpression.ArgumentList.Arguments.Count == 5)
-            {
-                this.invocationExpression.RemoveArgument(this.invocationExpression.ArgumentList.Arguments[4]);
-            }
-
-            if (this.invocationExpression.ArgumentList.Arguments.Count == 4
-                && (this.invocationExpression.ArgumentList.Arguments[3].Value is ICSharpLiteralExpression)
-                && (this.invocationExpression.ArgumentList.Arguments[3].Value as ICSharpLiteralExpression).Literal.GetTokenType() == CSharpTokenType.NULL_KEYWORD)
+            if (this.invocationExpression.ArgumentList.Arguments.Count == 4)
             {
                 this.invocationExpression.RemoveArgument(this.invocationExpression.ArgumentList.Arguments[3]);
+            }
+
+            if (this.invocationExpression.ArgumentList.Arguments.Count == 3
+                && (this.invocationExpression.ArgumentList.Arguments[2].Value is ICSharpLiteralExpression)
+                && (this.invocationExpression.ArgumentList.Arguments[2].Value as ICSharpLiteralExpression).Literal.GetTokenType() == CSharpTokenType.NULL_KEYWORD)
+            {
+                this.invocationExpression.RemoveArgument(this.invocationExpression.ArgumentList.Arguments[2]);
             }
 
             return null;
@@ -121,9 +121,9 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Actions
             }
 
             return this.invocationExpression != null
-                   && (this.invocationExpression.ArgumentList.Arguments.Count == 5
-                       && ((this.invocationExpression.ArgumentList.Arguments[4].Value is ICSharpLiteralExpression)
-                           && (this.invocationExpression.ArgumentList.Arguments[4].Value as ICSharpLiteralExpression).Literal.GetTokenType() == CSharpTokenType.FALSE_KEYWORD));
+                   && (this.invocationExpression.ArgumentList.Arguments.Count == 4
+                       && ((this.invocationExpression.ArgumentList.Arguments[3].Value is ICSharpLiteralExpression)
+                           && (this.invocationExpression.ArgumentList.Arguments[3].Value as ICSharpLiteralExpression).Literal.GetTokenType() == CSharpTokenType.FALSE_KEYWORD));
         }
 
         #endregion

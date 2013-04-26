@@ -21,7 +21,10 @@ Version 1.4
 Added/fixed:
 ============
 (+) Added support for R# 8.0.
+(*) Catel properties generation actions now use expression overloads.
 (*) Argument check context actions now use the expression overloads.
+(*) Updated Catel.Core reference.
+(x) Fixed the configuration of ViewModelToModel attribute by setting the right model property name when is requiered.
 
 ===========
 Version 1.3
