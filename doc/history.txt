@@ -13,6 +13,16 @@ http://catelresharper.codeplex.com
 Documentation can be found at: http://catel.catenalogic.com
 
 **********************************************************
+
+===========
+Version 1.4
+===========
+
+Added/fixed:
+============
+(+) Added support for R# 8.0.
+(*) Argument check context actions now use the expression overloads.
+
 ===========
 Version 1.3
 ===========

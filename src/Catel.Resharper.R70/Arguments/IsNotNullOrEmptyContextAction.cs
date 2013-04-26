@@ -1,7 +1,10 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IsNotNullOrEmptyContextAction.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
+// <summary>
+//   The is not null or empty context action.
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel.ReSharper.Arguments
 {
@@ -67,10 +70,7 @@ namespace Catel.ReSharper.Arguments
         /// </summary>
         public override string Text
         {
-            get
-            {
-                return "Add \"Argument.IsNotNullOrEmpty\"";
-            }
+            get { return "Add \"Argument.IsNotNullOrEmpty\""; }
         }
 
         #endregion
@@ -86,11 +86,9 @@ namespace Catel.ReSharper.Arguments
         /// <returns>
         /// The argument check statement
         /// </returns>
-        protected override ICSharpStatement CreateArgumentCheckStatement(
-            IRegularParameterDeclaration parameterDeclaration)
+        protected override ICSharpStatement CreateArgumentCheckStatement(IRegularParameterDeclaration parameterDeclaration)
         {
-            return ArgumentCheckStatementHelper.CreateIsNotNullOrEmptyArgumentCheckStatement(
-                this.Provider, parameterDeclaration);
+            return ArgumentCheckStatementHelper.CreateIsNotNullOrEmptyArgumentCheckStatement(this.Provider, parameterDeclaration);
         }
 
         /// <summary>
@@ -122,11 +120,9 @@ namespace Catel.ReSharper.Arguments
         /// <returns>
         /// <c>true</c> if the argument check exception is documented, otherwise <c>false</c>.
         /// </returns>
-        protected override bool IsArgumentCheckDocumented(
-            XmlNode xmlDocOfTheMethod, IRegularParameterDeclaration parameterDeclaration)
+        protected override bool IsArgumentCheckDocumented(XmlNode xmlDocOfTheMethod, IRegularParameterDeclaration parameterDeclaration)
         {
-            return ExceptionXmlDocDetectionHelper.NotNullOrEmptyDocumented(
-                xmlDocOfTheMethod.InnerXml, parameterDeclaration.DeclaredName);
+            return ExceptionXmlDocDetectionHelper.NotNullOrEmptyDocumented(xmlDocOfTheMethod.InnerXml, parameterDeclaration.DeclaredName);
         }
 
         /// <summary>
@@ -141,11 +137,9 @@ namespace Catel.ReSharper.Arguments
         /// <returns>
         /// <c>true</c> if the argument type checked is already done, otherwise <c>false</c>.
         /// </returns>
-        protected override bool IsArgumentChecked(
-            ICSharpFunctionDeclaration methodDeclaration, IRegularParameterDeclaration parameterDeclaration)
+        protected override bool IsArgumentChecked(ICSharpFunctionDeclaration methodDeclaration, IRegularParameterDeclaration parameterDeclaration)
         {
-            return ArgumentCheckStatementDetectionHelper.IsNotNullOrEmptyInvoked(
-                methodDeclaration.Body.GetText(), parameterDeclaration.DeclaredName);
+            return ArgumentCheckStatementDetectionHelper.IsNotNullOrEmptyInvoked(methodDeclaration.Body.GetText(), parameterDeclaration.DeclaredName);
         }
 
         /// <summary>
@@ -159,7 +153,8 @@ namespace Catel.ReSharper.Arguments
         /// </returns>
         protected override bool IsArgumentTypeTheExpected(IType type)
         {
-            return type != null && type.IsString();
+            IDeclaredType declaredType;
+            return type != null && (type.IsString() || ((declaredType = type.GetScalarType()) != null && declaredType.GetClrName().FullName == "System.Guid"));
         }
 
         #endregion
