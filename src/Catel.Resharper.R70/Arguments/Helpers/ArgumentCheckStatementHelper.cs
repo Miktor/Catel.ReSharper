@@ -8,7 +8,6 @@ namespace Catel.ReSharper.Arguments.Helpers
     using Catel.ReSharper.Arguments.Patterns;
     using Catel.ReSharper.Identifiers;
 
-    using JetBrains.Metadata.Reader.API;
     using JetBrains.ReSharper.Feature.Services.CSharp.Bulbs;
     using JetBrains.ReSharper.Psi;
     using JetBrains.ReSharper.Psi.CSharp.Tree;
@@ -175,6 +174,45 @@ namespace Catel.ReSharper.Arguments.Helpers
         }
 
         /// <summary>
+        /// Creates the is not match argument check statement.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="parameterDeclaration">
+        /// The parameter declaration.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICSharpStatement"/>.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="provider"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="parameterDeclaration"/> is <c>null</c>.</exception>
+        public static ICSharpStatement CreateIsNotMatchArgumentCheckStatement(ICSharpContextActionDataProvider provider, IRegularParameterDeclaration parameterDeclaration)
+        {
+            return CreateArgumentCheckStatement(provider, ArgumentCheckStatementPatterns.IsNotMatch, parameterDeclaration);
+        }
+
+        /// <summary>
+        /// Creates the is match argument check statement.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="parameterDeclaration">
+        /// The parameter declaration.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICSharpStatement"/>.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="provider"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="parameterDeclaration"/> is <c>null</c>.</exception>
+        public static ICSharpStatement CreateIsMatchArgumentCheckStatement(ICSharpContextActionDataProvider provider, IRegularParameterDeclaration parameterDeclaration)
+        {
+            return CreateArgumentCheckStatement(provider, ArgumentCheckStatementPatterns.IsMatch, parameterDeclaration);
+        }
+
+
+        /// <summary>
         /// Gets create argument check statement.
         /// </summary>
         /// <param name="provider">
@@ -194,9 +232,9 @@ namespace Catel.ReSharper.Arguments.Helpers
         /// <exception cref="System.ArgumentNullException">The <paramref name="parameterDeclaration"/> is <c>null</c>.</exception>
         private static ICSharpStatement CreateArgumentCheckStatement(ICSharpContextActionDataProvider provider, string pattern, IRegularParameterDeclaration parameterDeclaration)
         {
-            Argument.IsNotNull("provider", provider);
-            Argument.IsNotNullOrWhitespace("pattern", pattern);
-            Argument.IsNotNull("parameterDeclaration", parameterDeclaration);
+            Argument.IsNotNull(() => provider);
+            Argument.IsNotNullOrWhitespace(() => pattern);
+            Argument.IsNotNull(() => parameterDeclaration);
 
 #if R80
             IDeclaredType catelArgumentType = TypeFactory.CreateTypeByCLRName(CatelCore.Argument, provider.PsiModule, provider.SelectedElement.GetResolveContext());

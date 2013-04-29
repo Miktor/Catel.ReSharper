@@ -33,7 +33,7 @@ namespace Catel.ReSharper.Extensions
         /// </exception>
         public static Dictionary<string, List<TextRange>> GetFields(this ITreeNode @this)
         {
-            Argument.IsNotNull("@this", @this);
+            Argument.IsNotNull(() => @this);
             var fields = new Dictionary<string, List<TextRange>>();
 
             // NOTE: The expression 'field' pattern.

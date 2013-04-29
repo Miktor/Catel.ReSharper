@@ -58,7 +58,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp
         /// </exception>
         public override void Populate(CSharpGeneratorContext context)
         {
-            Argument.IsNotNull("context", context);
+            Argument.IsNotNull(() => context);
 
             IClassLikeDeclaration classLikeDeclaration = context.ClassDeclaration;
             ITypeElement declaredElement = classLikeDeclaration.DeclaredElement;

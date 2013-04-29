@@ -48,7 +48,7 @@ namespace Catel.ReSharper.CatelProperties.Providers
         /// <exception cref="System.ArgumentNullException">The <paramref name="dataContext"/> is <c>null</c>.</exception>
         public IEnumerable<IGenerateActionWorkflow> CreateWorkflow(IDataContext dataContext)
         {
-            Argument.IsNotNull("dataContext", dataContext);
+            Argument.IsNotNull(() => dataContext);
 
             ISolution solution = dataContext.GetData(DataConstants.SOLUTION);
             var iconManager = solution.GetComponent<PsiIconManager>();

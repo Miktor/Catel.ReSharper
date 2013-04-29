@@ -87,7 +87,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Actions
         protected override void ConvertProperty(
             PropertyConverter propertyConverter, IPropertyDeclaration propertyDeclaration)
         {
-            Argument.IsNotNull("propertyConverter", propertyConverter);
+            Argument.IsNotNull(() => propertyConverter);
 
             propertyConverter.Convert(propertyDeclaration);
         }

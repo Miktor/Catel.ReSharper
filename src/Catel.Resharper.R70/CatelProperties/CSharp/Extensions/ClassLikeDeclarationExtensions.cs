@@ -51,7 +51,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Extensions
         /// </exception>
         public static List<string> GetCSharpRegisterPropertyNames(this IClassLikeDeclaration classLikeDeclaration)
         {
-            Argument.IsNotNull("classLikeDeclaration", classLikeDeclaration);
+            Argument.IsNotNull(() => classLikeDeclaration);
 
             return
                 (from argument in
@@ -97,7 +97,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Extensions
         /// </exception>
         public static bool IsStaticEx(this IClassLikeDeclaration classLikeDeclaration)
         {
-            Argument.IsNotNull("classLikeDeclaration", classLikeDeclaration);
+            Argument.IsNotNull(() => classLikeDeclaration);
 
             return classLikeDeclaration.ModifiersList.HasModifier(CSharpTokenType.STATIC_KEYWORD);
         }

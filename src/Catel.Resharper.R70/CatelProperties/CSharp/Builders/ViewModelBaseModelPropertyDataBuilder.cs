@@ -68,7 +68,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Builders
         public override void Process(CSharpGeneratorContext context)
 #endif
         {
-            Argument.IsNotNull("context", context);
+            Argument.IsNotNull(() => context);
 
             CSharpElementFactory factory = CSharpElementFactory.GetInstance(context.Root.GetPsiModule());
 #if R80

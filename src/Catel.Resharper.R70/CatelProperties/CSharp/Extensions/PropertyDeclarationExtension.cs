@@ -43,7 +43,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Extensions
         /// <exception cref="System.ArgumentNullException">The <paramref name="propertyDeclaration"/> is <c>null</c>.</exception>
         public static bool HasDefaultCatelImplementation(this IPropertyDeclaration propertyDeclaration)
         {
-            Argument.IsNotNull("propertyDeclaration", propertyDeclaration);
+            Argument.IsNotNull(() => propertyDeclaration);
 
             bool defaultImplementation = true;
 

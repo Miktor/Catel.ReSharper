@@ -176,8 +176,8 @@ namespace Catel.ReSharper.Arguments
         /// </exception>
         protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
         {
-            Argument.IsNotNull("solution", solution);
-            Argument.IsNotNull("progress", progress);
+            Argument.IsNotNull(() => solution);
+            Argument.IsNotNull(() => progress);
 
             IDocCommentBlockNode exceptionCommentBlock = null;
             XmlNode xmlDoc = this.methodDeclaration.GetXMLDoc(false);

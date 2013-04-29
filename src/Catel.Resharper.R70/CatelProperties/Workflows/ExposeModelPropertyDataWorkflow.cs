@@ -91,7 +91,7 @@ namespace Catel.ReSharper.CatelProperties.Workflows
         /// <exception cref="System.ArgumentNullException">The <paramref name="dataContext"/> is <c>null</c>.</exception>
         public override bool IsAvailable(IDataContext dataContext)
         {
-            Argument.IsNotNull("dataContext", dataContext);
+            Argument.IsNotNull(() => dataContext);
             IGeneratorContextFactory generatorContextFactory = null;
 
             ISolution solution = dataContext.GetData(DataConstants.SOLUTION);

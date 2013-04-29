@@ -21,6 +21,11 @@ namespace Catel.ReSharper.Arguments.Patterns
         public const string ImplementsInterface = "$0.ImplementsInterface(() => $1, typeof(/*Value*/));";
 
         /// <summary>
+        /// The is match.
+        /// </summary>
+        public const string IsMatch = "$0.IsMatch(() => $1, \"/*Value*/\");";
+
+        /// <summary>
         /// The is maximal.
         /// </summary>
         public const string IsMaximum = "$0.IsMaximum(() => $1, /*Value*/);";
@@ -29,6 +34,11 @@ namespace Catel.ReSharper.Arguments.Patterns
         /// The is miminal.
         /// </summary>
         public const string IsMinimal = "$0.IsMinimal(() => $1, /*Value*/);";
+
+        /// <summary>
+        /// The is not match.
+        /// </summary>
+        public const string IsNotMatch = "$0.IsNotMatch(() => $1, \"/*Value*/\");";
 
         /// <summary>
         /// The catel argument is not null statement pattern.

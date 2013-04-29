@@ -16,6 +16,11 @@ namespace Catel.ReSharper.Arguments.Patterns
         #region Constants
 
         /// <summary>
+        /// The is match.
+        /// </summary>
+        public const string IsMatch2 = @"(Catel\s*[.]\s*)?Argument\s*[.]\s*IsMatch\s*[(]\s*[(]\s*[)]\s*=>\s*(@)?{0}\s*,[^)]+[)]\s*;";
+
+        /// <summary>
         ///     The is maximal.
         /// </summary>
         public const string IsMaximum = @"(Catel\s*[.]\s*)?Argument\s*[.]\s*IsMaximum\s*[(]\s*[""]{0}[""]\s*,\s*{0}\s*,[^)]+[)]\s*;";
@@ -34,6 +39,11 @@ namespace Catel.ReSharper.Arguments.Patterns
         /// The is minimal 2.
         /// </summary>
         public const string IsMinimal2 = @"(Catel\s*[.]\s*)?Argument\s*[.]\s*IsMinimal\s*[(]\s*[(]\s*[)]\s*=>\s*(@)?{0}\s*,[^)]+[)]\s*;";
+
+        /// <summary>
+        /// The is not match.
+        /// </summary>
+        public const string IsNotMatch2 = @"(Catel\s*[.]\s*)?Argument\s*[.]\s*IsNotMatch\s*[(]\s*[(]\s*[)]\s*=>\s*(@)?{0}\s*,[^)]+[)]\s*;";
 
         /// <summary>
         ///     The argument is not null call pattern.
@@ -94,6 +104,20 @@ namespace Catel.ReSharper.Arguments.Patterns
         /// The is of type 2.
         /// </summary>
         public const string IsOfType2 = @"(Catel\s*[.]\s*)?Argument\s*[.]\s*IsOfType\s*[(]\s*[(]\s*[)]\s*=>\s*(@)?{0}\s*,\s*(typeof\s*[(][^)]+[)]\s*[)]|[^)]+[)])";
+
+        #endregion
+
+        #region Static Fields
+
+        /// <summary>
+        /// The is match.
+        /// </summary>
+        public static string IsMatch = @"(Catel\s*[.]\s*)?Argument\s*[.]\s*IsMatch\s*[(]\s*[""]{0}[""]\s*,\s*{0}\s*,[^)]+[)]\s*;";
+
+        /// <summary>
+        /// The is not match.
+        /// </summary>
+        public static string IsNotMatch = @"(Catel\s*[.]\s*)?Argument\s*[.]\s*IsNotMatch\s*[(]\s*[""]{0}[""]\s*,\s*{0}\s*,[^)]+[)]\s*;";
 
         #endregion
     }

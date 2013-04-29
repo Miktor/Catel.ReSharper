@@ -103,7 +103,7 @@ namespace Catel.ReSharper.CatelProperties.Workflows
         /// </exception>
         public override bool IsAvailable(IDataContext dataContext)
         {
-            Argument.IsNotNull("dataContext", dataContext);
+            Argument.IsNotNull(() => dataContext);
 
             IGeneratorContextFactory generatorContextFactory = null;
 

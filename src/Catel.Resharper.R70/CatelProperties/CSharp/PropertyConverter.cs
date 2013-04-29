@@ -72,9 +72,9 @@ namespace Catel.ReSharper.CatelProperties.CSharp
         /// </param>
         public PropertyConverter(CSharpElementFactory factory, IPsiModule psiModule, IClassDeclaration classDeclaration)
         {
-            Argument.IsNotNull("factory", factory);
-            Argument.IsNotNull("psiModule", psiModule);
-            Argument.IsNotNull("classDeclaration", classDeclaration);
+            Argument.IsNotNull(() => factory);
+            Argument.IsNotNull(() => psiModule);
+            Argument.IsNotNull(() => classDeclaration);
 
             this.factory = factory;
             this.psiModule = psiModule;
@@ -112,7 +112,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp
             bool notificationMethod = false, 
             bool forwardEventArgument = false)
         {
-            Argument.IsNotNull("propertyDeclaration", propertyDeclaration);
+            Argument.IsNotNull(() => propertyDeclaration);
 
 #if R80
             IDeclaredType propertyDataType = TypeFactory.CreateTypeByCLRName(CatelCore.PropertyData, this.psiModule, propertyDeclaration.GetResolveContext());

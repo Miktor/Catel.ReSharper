@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -92,6 +92,12 @@
     </Compile>
     <Compile Include="..\Catel.Resharper.R70\Arguments\IsNotNullOrWhitespaceContextAction.cs">
       <Link>Arguments\IsNotNullOrWhitespaceContextAction.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Resharper.R70\Arguments\IsNotMatchContextAction.cs">
+      <Link>Arguments\IsNotMatchContextAction.cs</Link>
+    </Compile>
+    <Compile Include="..\Catel.Resharper.R70\Arguments\IsMatchContextAction.cs">
+      <Link>Arguments\IsMatchContextAction.cs</Link>
     </Compile>
     <Compile Include="..\Catel.Resharper.R70\Arguments\IsNotOutOfRangeContextAction.cs">
       <Link>Arguments\IsNotOutOfRangeContextAction.cs</Link>

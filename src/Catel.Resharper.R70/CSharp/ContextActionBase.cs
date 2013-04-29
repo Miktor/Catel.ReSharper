@@ -35,7 +35,7 @@ namespace Catel.ReSharper.CSharp
         /// </exception>
         protected ContextActionBase(ICSharpContextActionDataProvider provider)
         {
-            Argument.IsNotNull("provider", provider);
+            Argument.IsNotNull(() => provider);
 
             Provider = provider;
         }

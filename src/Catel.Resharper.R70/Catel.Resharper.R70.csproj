@@ -54,7 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arguments\ArgumentContextActionBase.cs" />
+    <Compile Include="Arguments\IsMatchContextAction.cs" />
     <Compile Include="Arguments\Helpers\ArgumentCheckStatementHelper.cs" />
+    <Compile Include="Arguments\IsNotMatchContextAction.cs" />
     <Compile Include="CatelProperties\CSharp\Actions\ExcludePropertyFromSerializationContextAction.cs" />
     <Compile Include="CatelProperties\CSharp\Actions\FieldContextActionBase.cs" />
     <Compile Include="CatelProperties\CSharp\Actions\IncludePropertyOnSerializationContextAction.cs" />

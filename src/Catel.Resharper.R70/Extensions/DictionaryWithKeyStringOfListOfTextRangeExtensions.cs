@@ -32,7 +32,7 @@ namespace Catel.ReSharper.Extensions
         /// <exception cref="System.ArgumentNullException">The <paramref name="this"/> is <c>null</c>.</exception>
         public static HotspotInfo[] AsHotspotInfos(this Dictionary<string, List<TextRange>> @this)
         {
-            Argument.IsNotNull("@this", @this);
+            Argument.IsNotNull(() => @this);
 
             return (from fieldName in @this.Keys
                     let nameSuggestionsExpression = new NameSuggestionsExpression(new[] { " " })
@@ -56,7 +56,7 @@ namespace Catel.ReSharper.Extensions
         public static void Merge(
             this Dictionary<string, List<TextRange>> @this, Dictionary<string, List<TextRange>> fields)
         {
-            Argument.IsNotNull("@this", @this);
+            Argument.IsNotNull(() => @this);
 
             if (fields != null)
             {
