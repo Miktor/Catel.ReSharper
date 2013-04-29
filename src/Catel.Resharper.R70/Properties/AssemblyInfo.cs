@@ -23,8 +23,8 @@ using JetBrains.Application.PluginSupport;
 [assembly: AssemblyCopyright("Copyright © Catel development team, 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("1.3.15.0")]
-[assembly: AssemblyInformationalVersion("1.3.15.0")]
+[assembly: AssemblyVersion("1.3.20.0")]
+[assembly: AssemblyInformationalVersion("1.3.20.0")]
 [assembly: ActionsXml("Catel.ReSharper.Actions.xml")]
 
 // The following information is displayed by ReSharper in the Plugins dialog
