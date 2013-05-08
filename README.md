@@ -113,12 +113,10 @@ _into this:_
     
 _with pleasure!_
 
-For more information about Catel.ReSharper, visit https://github.com/Catel/Catel.ReSharper
-
 ## Documentation
 
-Documentation can be found at https://catelproject.atlassian.net/wiki/display/CATELR/
+Documentation can be found at http://www.catelproject.com
 
 ## Issue tracking
 
-The issue tracker including a roadmap can be found at Documentation can be found at https://catelproject.atlassian.net/
+The issue tracker including a roadmap can be found at http://www.catelproject.com
