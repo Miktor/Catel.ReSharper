@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<project version='7' encrypted='1'>
+<project version='8' encrypted='1'>
 	<steps type='0'>
 		<step action='Group'>
 			<name>Project steps</name>
@@ -168,6 +168,13 @@
 			<indent type='3'>3</indent>
 			<name>If PublishType is Official</name>
 		</step>
+		<step action='Set Macro'>
+			<MacroName>PACKAGE_VERSION</MacroName>
+			<MacroValue>%VersionNumber%</MacroValue>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>4</indent>
+			<name>Set PACKAGE_VERSION </name>
+		</step>
 		<step action='Replace in File'>
 			<FileIn>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileIn>
 			<FileOut>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileOut>
@@ -185,6 +192,13 @@
 			<condexpr>%PublishType%</condexpr>
 			<indent type='3'>3</indent>
 			<name>Else If PublishType is Beta</name>
+		</step>
+		<step action='Set Macro'>
+			<MacroName>PACKAGE_VERSION</MacroName>
+			<MacroValue>%VersionNumber%-Beta-%BuildDateTimeTag%</MacroValue>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>4</indent>
+			<name>Set PACKAGE_VERSION</name>
 		</step>
 		<step action='Replace in File'>
 			<FileIn>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileIn>
@@ -204,6 +218,13 @@
 			<indent type='3'>3</indent>
 			<name>Else If PublishType is Nightly</name>
 		</step>
+		<step action='Set Macro'>
+			<MacroName>PACKAGE_VERSION</MacroName>
+			<MacroValue>%VersionNumber%-Nightly-%BuildDateTimeTag%</MacroValue>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>4</indent>
+			<name>Set PACKAGE_VERSION</name>
+		</step>
 		<step action='Replace in File'>
 			<FileIn>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileIn>
 			<FileOut>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileOut>
@@ -222,6 +243,13 @@
 			<indent type='3'>3</indent>
 			<name>Else If PublishType is RC</name>
 		</step>
+		<step action='Set Macro'>
+			<MacroName>PACKAGE_VERSION</MacroName>
+			<MacroValue>%VersionNumber%-RC-%BuildDateTimeTag%</MacroValue>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>4</indent>
+			<name>Set PACKAGE_VERSION</name>
+		</step>
 		<step action='Replace in File'>
 			<FileIn>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileIn>
 			<FileOut>%PROJDIR%\..\..\deployment\NSIS\setup-%PublishType%.nsi</FileOut>
@@ -234,8 +262,9 @@
 			<name>Set RC Logo</name>
 		</step>
 		<step action='Delete Folder'>
-			<Path>%PROJDIR%\..\..\output\%BuildConfiguration%</Path>
+			<Path>%PROJDIR%\..\..\output\</Path>
 			<Recurse type='11'>-1</Recurse>
+			<continueonfail type='3'>1</continueonfail>
 			<indent type='3'>2</indent>
 			<name>Clean output directory</name>
 		</step>
@@ -359,5 +388,115 @@
 			<SysOn type='11'>-1</SysOn>
 			<indent type='3'>2</indent>
 			<name>Rename setup file name as RC</name>
+		</step>
+		<step action='Group'>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>1</indent>
+			<name>NuGet</name>
+		</step>
+		<step action='Copy Files'>
+			<Converted type='11'>-1</Converted>
+			<Delay>15</Delay>
+			<DestDir>%PROJDIR%\..\..\output\NuGet\</DestDir>
+			<Ext>Catel.ReSharper.nuspec</Ext>
+			<Incremental type='11'>-1</Incremental>
+			<LogCopied type='11'>-1</LogCopied>
+			<ReadOnly type='11'>-1</ReadOnly>
+			<Retries>10</Retries>
+			<SourceDir>%PROJDIR%\..\..\deployment\NuGet\</SourceDir>
+			<TBD type='11'>-1</TBD>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>2</indent>
+			<name>Copy NuGet File</name>
+		</step>
+		<step action='Replace in File'>
+			<FileIn>%PROJDIR%\..\..\output\NuGet\Catel.ReSharper.nuspec</FileIn>
+			<FileOut>%PROJDIR%\..\..\output\NuGet\Catel.ReSharper.nuspec</FileOut>
+			<Find>%%VERSION_NUMBER%%</Find>
+			<NoModS type='11'>-1</NoModS>
+			<Replace>%PACKAGE_VERSION%</Replace>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>2</indent>
+			<name>Update package version</name>
+		</step>
+		<step action='PowerShell'>
+			<CmdStr>(Get-Date).ToString("yyyy")</CmdStr>
+			<CmdType type='3'>1</CmdType>
+			<NoInteract type='11'>-1</NoInteract>
+			<NoLogo type='11'>-1</NoLogo>
+			<indent type='3'>2</indent>
+			<name>Print current year</name>
+		</step>
+		<step action='Set Macro'>
+			<MacroName>CURRENT_YEAR</MacroName>
+			<MacroValue>%LASTSTEP_OUTPUT%</MacroValue>
+			<indent type='3'>2</indent>
+			<name>Get current year</name>
+		</step>
+		<step action='Replace in File'>
+			<FileIn>%PROJDIR%\..\..\output\NuGet\Catel.ReSharper.nuspec</FileIn>
+			<FileOut>%PROJDIR%\..\..\output\NuGet\Catel.ReSharper.nuspec</FileOut>
+			<Find>%%CURRENT_YEAR%%</Find>
+			<NoModS type='11'>-1</NoModS>
+			<Replace>%CURRENT_YEAR%</Replace>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>2</indent>
+			<name>Update current year</name>
+		</step>
+		<step action='Loop'>
+			<Delimiter><![CDATA[<newline>]]></Delimiter>
+			<Type type='3'>1</Type>
+			<Value>8.0</Value>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>2</indent>
+			<name>Loop trought Supported R# versions</name>
+		</step>
+		<step action='Set Macro'>
+			<MacroName>RESHARPER_VERSION</MacroName>
+			<MacroValue>%LOOP_VALUE%</MacroValue>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>3</indent>
+			<name>Set RESHARPER_VERSION</name>
+		</step>
+		<step action='Loop'>
+			<Delimiter><![CDATA[<newline>]]></Delimiter>
+			<Type type='3'>1</Type>
+			<Value><![CDATA[10.0
+11.0]]></Value>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>3</indent>
+			<name>Loop trought Supported Visual Studio versions</name>
+		</step>
+		<step action='Set Macro'>
+			<MacroName>VS_VERSION</MacroName>
+			<MacroValue>%LOOP_VALUE%</MacroValue>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>4</indent>
+			<name>SET VS_VERSION</name>
+		</step>
+		<step action='Copy Files'>
+			<Converted type='11'>-1</Converted>
+			<Delay>15</Delay>
+			<DestDir>%PROJDIR%\..\..\output\nuget\ReSharper\v%RESHARPER_VERSION%\vs%VS_VERSION%\plugins</DestDir>
+			<Ext>*.dll</Ext>
+			<Incremental type='11'>-1</Incremental>
+			<LogCopied type='11'>-1</LogCopied>
+			<ReadOnly type='11'>-1</ReadOnly>
+			<Recurse type='11'>-1</Recurse>
+			<Retries>10</Retries>
+			<SourceDir>%PROJDIR%\..\..\output\%BuildConfiguration%\v%RESHARPER_VERSION%\</SourceDir>
+			<TBD type='11'>-1</TBD>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>4</indent>
+			<name>Copy Files</name>
+		</step>
+		<step action='NuGet'>
+			<Command>pack</Command>
+			<Exe>c:\Apps\dos-utils\NuGet.exe</Exe>
+			<OutputDirectory>%PROJDIR%\..\..\output\NuGet\</OutputDirectory>
+			<PackageId>%PROJDIR%\..\..\output\NuGet\Catel.ReSharper.nuspec</PackageId>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>2</indent>
+			<name>NuGet</name>
 		</step></steps>
 </project>

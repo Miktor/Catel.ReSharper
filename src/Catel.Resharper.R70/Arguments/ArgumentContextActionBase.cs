@@ -16,6 +16,9 @@ namespace Catel.ReSharper.Arguments
 
     using JetBrains.Application;
     using JetBrains.Application.Progress;
+#if R80
+    using JetBrains.DocumentModel;
+#endif
     using JetBrains.ProjectModel;
     using JetBrains.ReSharper.Feature.Services.CSharp.Bulbs;
     using JetBrains.ReSharper.Feature.Services.LiveTemplates.Hotspots;
@@ -205,7 +208,11 @@ namespace Catel.ReSharper.Arguments
 
             // TODO: Detect the right position to insert the code.
             ITreeNode methodBodyFirstChild = this.methodDeclaration.Body.FirstChild;
+#if R80
+            Dictionary<string, List<DocumentRange>> fields = null;
+#else
             Dictionary<string, List<TextRange>> fields = null;
+#endif
             if (methodBodyFirstChild != null)
             {
                 ICSharpStatement checkStatement = ModificationUtil.AddChildAfter(methodBodyFirstChild, this.CreateArgumentCheckStatement(this.parameterDeclaration));
@@ -215,7 +222,8 @@ namespace Catel.ReSharper.Arguments
                     fields.Merge(exceptionCommentBlock.GetFields());
                 }
             }
-
+            
+           
             HotspotInfo[] hotspotInfos = fields != null ? fields.AsHotspotInfos() : new HotspotInfo[] { };
             return hotspotInfos.Length == 0
                        ? (Action<ITextControl>)null

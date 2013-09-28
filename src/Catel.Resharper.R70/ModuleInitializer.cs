@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ModuleInitializer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2012 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2013 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -9,14 +9,11 @@ namespace Catel.ReSharper
     using Catel.Logging;
 
     /// <summary>
-    /// Class that gets called as soon as the module is loaded.
+    /// Used by the ModuleInit. All code inside the Initialize method is ran as soon as the assembly is loaded.
     /// </summary>
-    /// <remarks>
-    /// This is made possible thanks to Fody.
-    /// </remarks>
     public static class ModuleInitializer
     {
-        #region Constants and Fields
+        #region Static Fields
 
         /// <summary>
         /// The log.
@@ -28,7 +25,7 @@ namespace Catel.ReSharper
         #region Public Methods and Operators
 
         /// <summary>
-        /// Initializes the module
+        /// Initializes the module.
         /// </summary>
         public static void Initialize()
         {
@@ -36,7 +33,7 @@ namespace Catel.ReSharper
             LogManager.RegisterDebugListener();
 #endif
             LogManager.AddListener(new LoggerListener());
-            
+
             Log.Debug("Loading Catel.ReSharper");
         }
 
