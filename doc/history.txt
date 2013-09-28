@@ -8,9 +8,9 @@ Catel.Resharper history
 
 For more information about issues or new feature requests, please visit:
 
-http://catelresharper.codeplex.com
+http://www.catelproject.com
 
-Documentation can be found at: http://catel.catenalogic.com
+Documentation can be found at: http://www.catelproject.com
 
 **********************************************************
 

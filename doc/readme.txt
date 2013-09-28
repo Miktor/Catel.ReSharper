@@ -8,4 +8,4 @@ fields:
 * Convert automatic properties to Catel properties
 * Check for arguments using the Argument class
 
-For more information, see https://github.com/Catel/Catel.ReSharper
+For more information, see http://www.catelproject.com
