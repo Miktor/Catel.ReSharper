@@ -4,9 +4,10 @@
     <id>Catel.ReSharper</id>
     <version>%VERSION_NUMBER%</version>
     <title>Catel.ReSharper</title>
-    <authors>Igr Alexander Fernandez Sauco</authors>
+    <authors>Igr Alexánder Fernández Saúco</authors>
     <description>Catel Plugin for ReSharper</description>
     <copyright>Copyright (c) 2008 - %CURRENT_YEAR% Catel development team. All rights reserved</copyright>
+    <iconUrl>https://raw.github.com/Catel/Catel.ReSharper/master/design/CatelR%232.png</iconUrl>
     <tags>Catel Plugin</tags>
     <dependencies>
       <dependency id="ReSharper" version="8.0" />
