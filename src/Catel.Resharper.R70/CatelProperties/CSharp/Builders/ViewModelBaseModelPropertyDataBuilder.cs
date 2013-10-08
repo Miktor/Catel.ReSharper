@@ -10,6 +10,11 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Builders
     using System.Linq;
 
     using Catel.Logging;
+
+#if R80
+    using JetBrains.Metadata.Reader.API;
+#endif
+    
     using Catel.ReSharper.CatelProperties.CSharp.Patterns;
     using Catel.ReSharper.Identifiers;
 
@@ -19,9 +24,13 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Builders
     using JetBrains.ReSharper.Psi.CSharp;
     using JetBrains.ReSharper.Psi.CSharp.Tree;
     using JetBrains.ReSharper.Psi.ExtensionsAPI.Tree;
+
 #if R80
+    using JetBrains.ReSharper.Psi.Modules;
     using JetBrains.ReSharper.Psi.Tree;
 #endif
+    using JetBrains.ReSharper.Psi.Tree;
+    using JetBrains.ReSharper.Psi.Util;
     using JetBrains.Util;
 
     /// <summary>
@@ -72,68 +81,103 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Builders
 
             CSharpElementFactory factory = CSharpElementFactory.GetInstance(context.Root.GetPsiModule());
 #if R80
-            IDeclaredType viewModelToModelAttributeClrType = TypeFactory.CreateTypeByCLRName(CatelMVVM.ViewModelToModelAttribute, context.PsiModule, context.Anchor.GetResolveContext());
+            IDeclaredType viewModelToModelAttributeClrType = TypeFactory.CreateTypeByCLRName(CatelMVVM.ViewModelToModelAttribute, context.PsiModule, UniversalModuleReferenceContext.Instance);
 #else
             IDeclaredType viewModelToModelAttributeClrType = TypeFactory.CreateTypeByCLRName(CatelMVVM.ViewModelToModelAttribute, context.PsiModule);
 #endif
-
             List<GeneratorDeclaredElement> declaredElements = context.InputElements.OfType<GeneratorDeclaredElement>().ToList();
             IClassLikeDeclaration classLikeDeclaration = context.ClassDeclaration;
-
-            bool includeInSerialization = bool.Parse(context.GetGlobalOptionValue(OptionIds.IncludePropertyInSerialization));
-            bool notificationMethod = bool.Parse(context.GetGlobalOptionValue(OptionIds.ImplementPropertyChangedNotificationMethod));
-            bool forwardEventArgument = bool.Parse(context.GetGlobalOptionValue(OptionIds.ForwardEventArgumentToImplementedPropertyChangedNotificationMethod));
-            var propertyConverter = new PropertyConverter(factory, context.PsiModule, (IClassDeclaration)classLikeDeclaration);
-            foreach (GeneratorDeclaredElement declaredElement in declaredElements)
+            if (classLikeDeclaration != null)
             {
-                var model = (IProperty)declaredElement.GetGroupingObject();
-                var modelProperty = (IProperty)declaredElement.DeclaredElement;
-                if (model != null)
+                bool includeInSerialization = bool.Parse(context.GetGlobalOptionValue(OptionIds.IncludePropertyInSerialization));
+                bool notificationMethod = bool.Parse(context.GetGlobalOptionValue(OptionIds.ImplementPropertyChangedNotificationMethod));
+                bool forwardEventArgument = bool.Parse(context.GetGlobalOptionValue(OptionIds.ForwardEventArgumentToImplementedPropertyChangedNotificationMethod));
+                var propertyConverter = new PropertyConverter(factory, context.PsiModule, (IClassDeclaration)classLikeDeclaration);
+                foreach (GeneratorDeclaredElement declaredElement in declaredElements)
                 {
-                    Log.Debug("Computing property name");
-                    string propertyName = string.Empty;
-                    if (!classLikeDeclaration.MemberDeclarations.ToList().Exists(declaration => declaration.DeclaredName == modelProperty.ShortName))
+                    var model = (IProperty)declaredElement.GetGroupingObject();
+                    var modelProperty = (IProperty)declaredElement.DeclaredElement;
+                    if (model != null)
                     {
-                        propertyName = modelProperty.ShortName;
-                    }
+                        Log.Debug("Computing property name");
+                        string propertyName = string.Empty;
 
-                    if (string.IsNullOrEmpty(propertyName) && !classLikeDeclaration.MemberDeclarations.ToList().Exists(declaration => declaration.DeclaredName == model.ShortName + modelProperty.ShortName))
-                    {
-                        propertyName = model.ShortName + modelProperty.ShortName;
-                    }
+                        var cSharpTypeMemberDeclarations = new List<ICSharpTypeMemberDeclaration>();
 
-                    int idx = 0;
-                    while (string.IsNullOrEmpty(propertyName))
-                    {
-                        if (!classLikeDeclaration.MemberDeclarations.ToList().Exists(declaration => declaration.DeclaredName == model.ShortName + modelProperty.ShortName + idx.ToString(CultureInfo.InvariantCulture)))
+                        IClassLikeDeclaration currentClassDeclaration = classLikeDeclaration;
+                        do
                         {
-                            propertyName = model.ShortName + modelProperty.ShortName + idx.ToString(CultureInfo.InvariantCulture);
+                            cSharpTypeMemberDeclarations.AddRange(currentClassDeclaration.MemberDeclarations);
+                            var superType = currentClassDeclaration.SuperTypes.FirstOrDefault(type => type.IsClassType());
+                            if (superType != null)
+                            {
+                                var superTypeTypeElement = superType.GetTypeElement();
+                                if (superTypeTypeElement != null)
+                                {
+                                    currentClassDeclaration = (IClassLikeDeclaration)superTypeTypeElement.GetDeclarations().FirstOrDefault();
+                                }
+                            }
+                        }
+                        while (currentClassDeclaration != null);
+
+
+                        if (!cSharpTypeMemberDeclarations.Exists(declaration => declaration.DeclaredName == modelProperty.ShortName))
+                        {
+                            propertyName = modelProperty.ShortName;
                         }
 
-                        idx++;
-                    }
+                        if (string.IsNullOrEmpty(propertyName) && !cSharpTypeMemberDeclarations.Exists(declaration => declaration.DeclaredName == model.ShortName + modelProperty.ShortName))
+                        {
+                            propertyName = model.ShortName + modelProperty.ShortName;
+                        }
 
-                    Log.Debug("Adding property '{0}'", propertyName);
-                    var propertyDeclaration = (IPropertyDeclaration)factory.CreateTypeMemberDeclaration(ImplementationPatterns.AutoProperty, modelProperty.Type, propertyName);
-                    propertyDeclaration = ModificationUtil.AddChildAfter(classLikeDeclaration, model.GetDeclarations().FirstOrDefault(), propertyDeclaration);
-#if R80
-                    var fixedArguments = new List<AttributeValue> { new AttributeValue(ClrConstantValueFactory.CreateStringValue(model.ShortName, context.PsiModule, context.Anchor.GetResolveContext())) };
-#else
-                    var fixedArguments = new List<AttributeValue> { new AttributeValue(ClrConstantValueFactory.CreateStringValue(model.ShortName, context.PsiModule)) };
-#endif
-                    if (propertyName != modelProperty.ShortName)
-                    {
-#if R80
-                        fixedArguments.Add(new AttributeValue(ClrConstantValueFactory.CreateStringValue(modelProperty.ShortName, context.PsiModule, context.Anchor.GetResolveContext())));
-#else
-                        fixedArguments.Add(new AttributeValue(ClrConstantValueFactory.CreateStringValue(modelProperty.ShortName, context.PsiModule)));
-#endif
-                    }
+                        int idx = 0;
+                        while (string.IsNullOrEmpty(propertyName))
+                        {
+                            if (!cSharpTypeMemberDeclarations.Exists(declaration => declaration.DeclaredName == model.ShortName + modelProperty.ShortName + idx.ToString(CultureInfo.InvariantCulture)))
+                            {
+                                propertyName = model.ShortName + modelProperty.ShortName + idx.ToString(CultureInfo.InvariantCulture);
+                            }
 
-                    Log.Debug("Adding attribute ViewModelToModel to property '{0}'", propertyName);
-                    IAttribute attribute = factory.CreateAttribute(viewModelToModelAttributeClrType.GetTypeElement(), fixedArguments.ToArray(), new Pair<string, AttributeValue>[] { });
-                    propertyDeclaration.AddAttributeAfter(attribute, null);
-                    propertyConverter.Convert(propertyDeclaration, includeInSerialization, notificationMethod, forwardEventArgument);
+                            idx++;
+                        }
+
+                        Log.Debug("Adding property '{0}'", propertyName);
+                        var propertyDeclaration = (IPropertyDeclaration)factory.CreateTypeMemberDeclaration(ImplementationPatterns.AutoProperty, modelProperty.Type, propertyName);
+
+                        var modelMemberDeclaration = model.GetDeclarations().FirstOrDefault();
+                        if (modelMemberDeclaration != null && modelMemberDeclaration.Parent != null)
+                        {
+                            var modelClassDeclaration = modelMemberDeclaration.Parent.Parent;
+                            if (modelClassDeclaration == classLikeDeclaration)
+                            {
+                                propertyDeclaration = ModificationUtil.AddChildAfter(modelClassDeclaration, modelMemberDeclaration, propertyDeclaration);
+                            }
+                            else if (classLikeDeclaration.Body != null && classLikeDeclaration.Body.FirstChild != null)
+                            {
+
+                                propertyDeclaration = ModificationUtil.AddChildAfter(classLikeDeclaration.Body.FirstChild, propertyDeclaration);
+                            }
+                        }
+#if R80
+                        var fixedArguments = new List<AttributeValue> { new AttributeValue(ClrConstantValueFactory.CreateStringValue(model.ShortName, context.PsiModule, UniversalModuleReferenceContext.Instance)) };
+#else
+                        var fixedArguments = new List<AttributeValue> { new AttributeValue(ClrConstantValueFactory.CreateStringValue(model.ShortName, context.PsiModule)) };
+#endif
+                        if (propertyName != modelProperty.ShortName)
+                        {
+#if R80
+                        fixedArguments.Add(new AttributeValue(ClrConstantValueFactory.CreateStringValue(modelProperty.ShortName, context.PsiModule,  UniversalModuleReferenceContext.Instance)));
+#else
+                            fixedArguments.Add(new AttributeValue(ClrConstantValueFactory.CreateStringValue(modelProperty.ShortName, context.PsiModule)));
+#endif
+                        }
+
+                        Log.Debug("Adding attribute ViewModelToModel to property '{0}'", propertyName);
+                        IAttribute attribute = factory.CreateAttribute(viewModelToModelAttributeClrType.GetTypeElement(), fixedArguments.ToArray(), new Pair<string, AttributeValue>[] { });
+                        propertyDeclaration.AddAttributeAfter(attribute, null);
+                        propertyConverter.Convert(propertyDeclaration, includeInSerialization, notificationMethod, forwardEventArgument);
+                    }
                 }
             }
         }

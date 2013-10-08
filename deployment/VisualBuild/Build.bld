@@ -462,7 +462,8 @@
 			<Delimiter><![CDATA[<newline>]]></Delimiter>
 			<Type type='3'>1</Type>
 			<Value><![CDATA[10.0
-11.0]]></Value>
+11.0
+12.0]]></Value>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>3</indent>
 			<name>Loop trought Supported Visual Studio versions</name>

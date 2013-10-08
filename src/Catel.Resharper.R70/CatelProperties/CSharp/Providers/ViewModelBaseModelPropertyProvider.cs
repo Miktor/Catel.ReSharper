@@ -21,6 +21,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Providers
 #if R80
     using JetBrains.ReSharper.Psi.Tree;
 #endif
+    using JetBrains.ReSharper.Psi.Util;
     using JetBrains.Util;
 
     /// <summary>
@@ -58,76 +59,87 @@ namespace Catel.ReSharper.CatelProperties.CSharp.Providers
         {
             Argument.IsNotNull(() => context);
 
-            IClassLikeDeclaration classLikeDeclaration = context.ClassDeclaration;
-            ITypeElement declaredElement = classLikeDeclaration.DeclaredElement;
-#if R80
-            var moduleReferenceResolveContext = context.Anchor.GetResolveContext();
-            ITypeElement viewModelBaseElement = TypeFactory.CreateTypeByCLRName(CatelMVVM.ViewModelBase, context.PsiModule, moduleReferenceResolveContext).GetTypeElement();
-#else
-            ITypeElement viewModelBaseElement = TypeFactory.CreateTypeByCLRName(CatelMVVM.ViewModelBase, context.PsiModule).GetTypeElement();
-#endif
-            if (declaredElement is IClass && declaredElement.IsDescendantOf(viewModelBaseElement))
+            if (context.Anchor.Parent != null && context.Anchor.Parent.Parent is IClassLikeDeclaration)
             {
+                IClassLikeDeclaration classLikeDeclaration = context.ClassDeclaration;
+                ITypeElement declaredElement = classLikeDeclaration.DeclaredElement;
+#if R80
+                var moduleReferenceResolveContext = context.Anchor.GetResolveContext();
+                ITypeElement viewModelBaseElement = TypeFactory.CreateTypeByCLRName(CatelMVVM.ViewModelBase, context.PsiModule, moduleReferenceResolveContext).GetTypeElement();
+#else
+                ITypeElement viewModelBaseElement = TypeFactory.CreateTypeByCLRName(CatelMVVM.ViewModelBase, context.PsiModule).GetTypeElement();
+#endif
+                if (declaredElement is IClass && declaredElement.IsDescendantOf(viewModelBaseElement))
+                {
 #if R80
                 IDeclaredType modelAttributeClrType = TypeFactory.CreateTypeByCLRName(CatelMVVM.ModelAttribute, context.PsiModule, moduleReferenceResolveContext);
                 IDeclaredType viewModelToModelAttributeClrType = TypeFactory.CreateTypeByCLRName(CatelMVVM.ViewModelToModelAttribute, context.PsiModule, moduleReferenceResolveContext);
 #else
-                IDeclaredType modelAttributeClrType = TypeFactory.CreateTypeByCLRName(CatelMVVM.ModelAttribute, context.PsiModule);
-                IDeclaredType viewModelToModelAttributeClrType = TypeFactory.CreateTypeByCLRName(CatelMVVM.ViewModelToModelAttribute, context.PsiModule);
+                    IDeclaredType modelAttributeClrType = TypeFactory.CreateTypeByCLRName(CatelMVVM.ModelAttribute, context.PsiModule);
+                    IDeclaredType viewModelToModelAttributeClrType = TypeFactory.CreateTypeByCLRName(CatelMVVM.ViewModelToModelAttribute, context.PsiModule);
 #endif
-                List<IProperty> properties = declaredElement.GetMembers().OfType<IProperty>().ToList();
+                    var properties = new List<IProperty>();
+                    ITypeElement element = declaredElement;
+                    do
+                    {
+                        properties.AddRange(element.GetMembers().OfType<IProperty>());
+                        var declaredType = element.GetSuperTypes().FirstOrDefault(type => type.GetClrName().FullName != CatelMVVM.ViewModelBase);
+                        element = declaredType != null ? declaredType.GetTypeElement() : null;
+                    }
+                    while (element != null);
 
-                Log.Debug("Looking for ViewModelToModel properties");
-                var viewModelProperties = new Dictionary<string, List<string>>();
-                foreach (IProperty property in properties)
-                {
+                    Log.Debug("Looking for ViewModelToModel properties");
+                    var viewModelProperties = new Dictionary<string, List<string>>();
+                    foreach (IProperty property in properties)
+                    {
 #if R80
                     IAttributeInstance viewModelToModel = property.GetAttributeInstances(false).FirstOrDefault(instance => Equals(instance.GetAttributeType(), viewModelToModelAttributeClrType));
 #else
-                    IAttributeInstance viewModelToModel = property.GetAttributeInstances(false).FirstOrDefault(instance => Equals(instance.AttributeType, viewModelToModelAttributeClrType));
+                        IAttributeInstance viewModelToModel = property.GetAttributeInstances(false).FirstOrDefault(instance => Equals(instance.AttributeType, viewModelToModelAttributeClrType));
 #endif
-                    if (viewModelToModel != null)
-                    {
-                        var positionParameters = viewModelToModel.PositionParameters().ToList();
-                        var modelName = (string)positionParameters[0].ConstantValue.Value;
-                        var propertyName = (string)positionParameters[1].ConstantValue.Value;
-                        if (string.IsNullOrEmpty(propertyName))
+                        if (viewModelToModel != null)
                         {
-                            propertyName = property.ShortName;
-                        }
+                            var positionParameters = viewModelToModel.PositionParameters().ToList();
+                            var modelName = (string)positionParameters[0].ConstantValue.Value;
+                            var propertyName = (string)positionParameters[1].ConstantValue.Value;
+                            if (string.IsNullOrEmpty(propertyName))
+                            {
+                                propertyName = property.ShortName;
+                            }
 
-                        if (!viewModelProperties.ContainsKey(modelName))
-                        {
-                            viewModelProperties.Add(modelName, new List<string>());
-                        }
+                            if (!viewModelProperties.ContainsKey(modelName))
+                            {
+                                viewModelProperties.Add(modelName, new List<string>());
+                            }
 
-                        viewModelProperties[modelName].Add(propertyName);
+                            viewModelProperties[modelName].Add(propertyName);
+                        }
                     }
-                }
 
-                Log.Debug("Looking for Model properties");
+                    Log.Debug("Looking for Model properties");
 
-                foreach (IProperty property in properties)
-                {
+                    foreach (IProperty property in properties)
+                    {
 #if R80
                     if (property.GetAttributeInstances(false).FirstOrDefault(instance => Equals(instance.GetAttributeType(), modelAttributeClrType)) != null)
 #else
-                    if (property.GetAttributeInstances(false).FirstOrDefault(instance => Equals(instance.AttributeType, modelAttributeClrType)) != null)
+                        if (property.GetAttributeInstances(false).FirstOrDefault(instance => Equals(instance.AttributeType, modelAttributeClrType)) != null)
 #endif
-                    {
-                        var propertyDeclaration = property.GetDeclarations().FirstOrDefault() as IPropertyDeclaration;
-                        if (propertyDeclaration != null && propertyDeclaration.Type is IDeclaredType)
                         {
-                            var declaredType = propertyDeclaration.Type as IDeclaredType;
-                            var typeElement = declaredType.GetTypeElement();
-                            if (typeElement != null)
+                            var propertyDeclaration = property.GetDeclarations().FirstOrDefault() as IPropertyDeclaration;
+                            if (propertyDeclaration != null && propertyDeclaration.Type is IDeclaredType)
                             {
-                                IProperty copyProperty = property;
-                                context.ProvidedElements.AddRange(from member in typeElement.GetMembers().OfType<IProperty>() where !viewModelProperties.ContainsKey(copyProperty.ShortName) || !viewModelProperties[copyProperty.ShortName].Contains(member.ShortName) select new GeneratorDeclaredElement(member, EmptySubstitution.INSTANCE, copyProperty));
+                                var declaredType = propertyDeclaration.Type as IDeclaredType;
+                                var typeElement = declaredType.GetTypeElement();
+                                if (typeElement != null)
+                                {
+                                    IProperty copyProperty = property;
+                                    context.ProvidedElements.AddRange(from member in typeElement.GetMembers().OfType<IProperty>() where !viewModelProperties.ContainsKey(copyProperty.ShortName) || !viewModelProperties[copyProperty.ShortName].Contains(member.ShortName) select new GeneratorDeclaredElement(member, EmptySubstitution.INSTANCE, copyProperty));
+                                }
                             }
                         }
                     }
-                }
+                }                
             }
         }
 

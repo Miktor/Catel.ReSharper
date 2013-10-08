@@ -33,7 +33,7 @@ Set revisionNumber = vbld_TempMacros.Add("REVISION_NUMBER", Left(Mid(output, 14)
 		</step>
 		<step action='Set Macro'>
 			<MacroName>FULL_VERSION_NUMBER</MacroName>
-			<MacroValue>%VERSION_NUMBER%.0</MacroValue>
+			<MacroValue>%VERSION_NUMBER%.1</MacroValue>
 			<indent type='3'>1</indent>
 			<name>Compute version number</name>
 		</step>

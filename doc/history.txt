@@ -15,6 +15,16 @@ Documentation can be found at: http://www.catelproject.com
 **********************************************************
 
 ===========
+Version 1.4.1
+===========
+
+Added/fixed:
+============
+(+) Added support for VS2013.
+(+) Expose model properties generation works in view model hierarchies.
+(x) Fixed expose model properties generation for R# v8.0.
+
+===========
 Version 1.4
 ===========
 
