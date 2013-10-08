@@ -4,23 +4,20 @@
 		<step action='Group'>
 			<name>Project steps</name>
 		</step>
-		<step action='Mercurial'>
-			<Command>log</Command>
-			<Noninteractive type='11'>-1</Noninteractive>
-			<Options>--limit 1</Options>
-			<WorkDir>%PROJDIR%\..\..</WorkDir>
-			<checked type='11'>0</checked>
+		<step action='Git'>
+			<Command>rev-list  --count HEAD</Command>
+			<WorkDir>%PROJDIR%\..\..\</WorkDir>
+			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>1</indent>
-			<name>Log top most revision</name>
+			<name>Git</name>
 		</step>
 		<step action='Run Script'>
 			<Language>VBScript</Language>
 			<Script><![CDATA[Set output = Application.Macros(vbldSystem).Item("LASTSTEP_OUTPUT")
-Set revisionNumber = vbld_TempMacros.Add("REVISION_NUMBER", Left(Mid(output, 14), InStr(Mid(output, 14), ":") - 1))
+Set revisionNumber = vbld_TempMacros.Add("REVISION_NUMBER", Trim(output))
 
 
 ]]></Script>
-			<checked type='11'>0</checked>
 			<indent type='3'>1</indent>
 			<name>Retrive revision number from log output</name>
 		</step>
@@ -33,7 +30,7 @@ Set revisionNumber = vbld_TempMacros.Add("REVISION_NUMBER", Left(Mid(output, 14)
 		</step>
 		<step action='Set Macro'>
 			<MacroName>FULL_VERSION_NUMBER</MacroName>
-			<MacroValue>%VERSION_NUMBER%.1</MacroValue>
+			<MacroValue>%VERSION_NUMBER%.%REVISION_NUMBER%</MacroValue>
 			<indent type='3'>1</indent>
 			<name>Compute version number</name>
 		</step>
