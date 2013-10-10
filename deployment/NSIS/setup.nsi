@@ -3,6 +3,7 @@
     
     Name "Catel.ReSharper"
     BrandingText 'Catel development team'
+    SetCompressor /SOLID lzma
     
     #!define RESHARPER_BASE_DIR "$PROGRAMFILES\JetBrains\ReSharper"
     
