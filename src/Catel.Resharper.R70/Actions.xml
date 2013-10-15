@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <actions>
+  <!--
   <insert group-id="ReSharper" position="last">
     <action-group id="Catel.ReSharper" text="Catel.ReSharper">
       <action id="Catel.ReSharper.About" text="About Catel.ReSharper" />
+  -->
       <!-- to break up elements use <separator/> -->
-    </action-group>
-  </insert>
+  <!--
+	</action-group>
+  </insert> 
+  -->
 </actions>
