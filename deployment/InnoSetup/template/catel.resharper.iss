@@ -18,14 +18,14 @@
 #define ReSharper70RegistryRoot "Software\JetBrains\ReSharper\v7.0\"
 #define ReSharper71RegistryRoot "Software\JetBrains\ReSharper\v7.1\"
 #define ReSharper80RegistryRoot "Software\JetBrains\ReSharper\v8.0\"
-#define ReSharper81RegistryRoot "Software\JetBrains\ReSharper\v8.1\"
+;#define ReSharper81RegistryRoot "Software\JetBrains\ReSharper\v8.1\"
 
 #define ReSharper60InstallDir ReadReg(HKEY_LOCAL_MACHINE, ReSharper60RegistryRoot, "InstallDir", "")
 #define ReSharper61InstallDir ReadReg(HKEY_LOCAL_MACHINE, ReSharper61RegistryRoot, "InstallDir", "")
 #define ReSharper70InstallDir ReadReg(HKEY_LOCAL_MACHINE, ReSharper70RegistryRoot, "InstallDir", "")
 #define ReSharper71InstallDir ReadReg(HKEY_LOCAL_MACHINE, ReSharper71RegistryRoot, "InstallDir", "")
 #define ReSharper80InstallDir ReadReg(HKEY_LOCAL_MACHINE, ReSharper80RegistryRoot, "InstallDir", "")
-#define ReSharper81InstallDir ReadReg(HKEY_LOCAL_MACHINE, ReSharper81RegistryRoot, "InstallDir", "")
+;#define ReSharper81InstallDir ReadReg(HKEY_LOCAL_MACHINE, ReSharper81RegistryRoot, "InstallDir", "")
 
 [_ISTool]
 EnableISX=false
@@ -83,7 +83,7 @@ Name: "{#ReSharper61InstallDir}\Plugins"; Components: ReSharper61
 Name: "{#ReSharper70InstallDir}\Plugins"; Components: ReSharper70
 Name: "{#ReSharper71InstallDir}\Plugins"; Components: ReSharper71
 Name: "{#ReSharper80InstallDir}\Plugins"; Components: ReSharper80
-Name: "{#ReSharper81InstallDir}\Plugins"; Components: ReSharper81
+;Name: "{#ReSharper81InstallDir}\Plugins"; Components: ReSharper81
 
 [Files]
 Source: readme.txt; DestDir: {app};
@@ -95,7 +95,7 @@ Source: plugins\v6.1\*; DestDir: {#ReSharper61InstallDir}\Plugins; Flags: create
 Source: plugins\v7.0\*; DestDir: {#ReSharper70InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper70
 Source: plugins\v7.1\*; DestDir: {#ReSharper71InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper71
 Source: plugins\v8.0\*; DestDir: {#ReSharper80InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper80
-Source: plugins\v8.1\*; DestDir: {#ReSharper81InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper81
+;Source: plugins\v8.1\*; DestDir: {#ReSharper81InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper81
 
 [CustomMessages]
 DotNetMissing=This setup requires the .NET Framework. Please download and install the .NET Framework and run this setup again. Do you want to download the framework now?
@@ -138,7 +138,7 @@ Name: "ReSharper61"; Description: "ReSharper 6.1"; Types: full compact custom; C
 Name: "ReSharper70"; Description: "ReSharper 7.0"; Types: full compact custom; Check: IsReSharper70Installed
 Name: "ReSharper71"; Description: "ReSharper 7.1"; Types: full compact custom; Check: IsReSharper71Installed
 Name: "ReSharper80"; Description: "ReSharper 8.0"; Types: full compact custom; Check: IsReSharper80Installed
-Name: "ReSharper81"; Description: "ReSharper 8.1"; Types: full compact custom; Check: IsReSharper81Installed
+;Name: "ReSharper81"; Description: "ReSharper 8.1"; Types: full compact custom; Check: IsReSharper81Installed
 
 [Code]
 //=========================================================================
