@@ -13,11 +13,15 @@
 #define OutputFileWithSpaces OutputPrefix + "_" + AppDisplayVersion
 #define OutputFile StringChange(OutputFileWithSpaces, " ", "_")
 
+#define ReSharper60RegistryRoot "Software\JetBrains\ReSharper\v6.0\"
+#define ReSharper61RegistryRoot "Software\JetBrains\ReSharper\v6.1\"
 #define ReSharper70RegistryRoot "Software\JetBrains\ReSharper\v7.0\"
 #define ReSharper71RegistryRoot "Software\JetBrains\ReSharper\v7.1\"
 #define ReSharper80RegistryRoot "Software\JetBrains\ReSharper\v8.0\"
 #define ReSharper81RegistryRoot "Software\JetBrains\ReSharper\v8.1\"
 
+#define ReSharper60InstallDir ReadReg(HKEY_LOCAL_MACHINE, ReSharper60RegistryRoot, "InstallDir", "")
+#define ReSharper61InstallDir ReadReg(HKEY_LOCAL_MACHINE, ReSharper61RegistryRoot, "InstallDir", "")
 #define ReSharper70InstallDir ReadReg(HKEY_LOCAL_MACHINE, ReSharper70RegistryRoot, "InstallDir", "")
 #define ReSharper71InstallDir ReadReg(HKEY_LOCAL_MACHINE, ReSharper71RegistryRoot, "InstallDir", "")
 #define ReSharper80InstallDir ReadReg(HKEY_LOCAL_MACHINE, ReSharper80RegistryRoot, "InstallDir", "")
@@ -74,6 +78,8 @@ UseRelativePaths=true
 Name: "{app}\doc"
 Name: "{app}\resources"
 
+Name: "{#ReSharper60InstallDir}\Plugins"; Components: ReSharper60
+Name: "{#ReSharper61InstallDir}\Plugins"; Components: ReSharper61
 Name: "{#ReSharper70InstallDir}\Plugins"; Components: ReSharper70
 Name: "{#ReSharper71InstallDir}\Plugins"; Components: ReSharper71
 Name: "{#ReSharper80InstallDir}\Plugins"; Components: ReSharper80
@@ -84,10 +90,12 @@ Source: readme.txt; DestDir: {app};
 Source: resources\*; DestDir: {app}\resources;
 Source: resources\catel.ico; DestDir: {app}\resources;
 
-Source: plugins\*; DestDir: {#ReSharper70InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper70
-Source: plugins\*; DestDir: {#ReSharper71InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper71
-Source: plugins\*; DestDir: {#ReSharper80InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper80
-Source: plugins\*; DestDir: {#ReSharper81InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper81
+Source: plugins\v6.0\*; DestDir: {#ReSharper60InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper60
+Source: plugins\v6.1\*; DestDir: {#ReSharper61InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper61
+Source: plugins\v7.0\*; DestDir: {#ReSharper70InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper70
+Source: plugins\v7.1\*; DestDir: {#ReSharper71InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper71
+Source: plugins\v8.0\*; DestDir: {#ReSharper80InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper80
+Source: plugins\v8.1\*; DestDir: {#ReSharper81InstallDir}\Plugins; Flags: createallsubdirs recursesubdirs; Components: ReSharper81
 
 [CustomMessages]
 DotNetMissing=This setup requires the .NET Framework. Please download and install the .NET Framework and run this setup again. Do you want to download the framework now?
@@ -125,6 +133,8 @@ Name: "Spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 CompileLogMethod=append
 
 [Components]
+Name: "ReSharper60"; Description: "ReSharper 6.0"; Types: full compact custom; Check: IsReSharper60Installed
+Name: "ReSharper61"; Description: "ReSharper 6.1"; Types: full compact custom; Check: IsReSharper61Installed
 Name: "ReSharper70"; Description: "ReSharper 7.0"; Types: full compact custom; Check: IsReSharper70Installed
 Name: "ReSharper71"; Description: "ReSharper 7.1"; Types: full compact custom; Check: IsReSharper71Installed
 Name: "ReSharper80"; Description: "ReSharper 8.0"; Types: full compact custom; Check: IsReSharper80Installed
@@ -174,6 +184,16 @@ end;
 	Checks whether ReSharper is installed
 }
 
+function IsReSharper60Installed : Boolean;
+begin
+	Result := RegKeyExists(HKLM,'{#ReSharper60RegistryRoot}');
+end;
+
+function IsReSharper61Installed : Boolean;
+begin
+	Result := RegKeyExists(HKLM,'{#ReSharper61RegistryRoot}');
+end;
+
 function IsReSharper70Installed : Boolean;
 begin
 	Result := RegKeyExists(HKLM,'{#ReSharper70RegistryRoot}');
@@ -198,7 +218,9 @@ function IsReSharperInstalled : Boolean;
 var
     ReSharperInstalled : Boolean;
 begin
-  ReSharperInstalled := IsReSharper70Installed() Or 
+  ReSharperInstalled := IsReSharper60Installed() Or 
+                        IsReSharper61Installed() Or  
+                        IsReSharper70Installed() Or 
                         IsReSharper71Installed() Or  
                         IsReSharper80Installed() Or  
                         IsReSharper81Installed();
