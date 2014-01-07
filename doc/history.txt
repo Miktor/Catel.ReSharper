@@ -23,6 +23,7 @@ Added/fixed:
 (+) Added support for VS2013.
 (+) Expose model properties generation works in view model hierarchies.
 (-) Removed Catel.ReSharper top menu and the about dialog action.
+(x) CTL-263 Fixed property code generation within a generic class.
 (x) Fixed expose model properties generation for R# v8.0.
 
 ===========

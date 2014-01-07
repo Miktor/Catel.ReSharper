@@ -6,6 +6,7 @@
 namespace Catel.ReSharper.CatelProperties.CSharp
 {
     using System;
+    using System.Globalization;
     using System.Linq;
 
     using Catel.Logging;
@@ -130,10 +131,16 @@ namespace Catel.ReSharper.CatelProperties.CSharp
 
             IFieldDeclaration propertyDataMemberDeclaration;
 
+            var declaredName = this.classDeclaration.DeclaredName;
+            if (this.classDeclaration.TypeParameters.Count > 0)
+            {
+                var parameters = this.classDeclaration.TypeParameters.Aggregate(string.Empty, (current, parameter) => current + (parameter.DeclaredName + ", "));
+                declaredName = string.Format(CultureInfo.InvariantCulture, "{0}<{1}>", declaredName, parameters.Substring(0, parameters.Length - 2));
+            }
+
             if (notificationMethod)
             {
-                string methodName =
-                    this.ComputeMemberName(string.Format(NamePatterns.NotificationMethodName, propertyName));
+                string methodName = this.ComputeMemberName(string.Format(NamePatterns.NotificationMethodName, propertyName));
 
                 IMethodDeclaration methodDeclaration;
                 IDocCommentBlockNode methodComment;
@@ -148,7 +155,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp
                                 propertyName, 
                                 propertyDataName, 
                                 propertyDeclaration.DeclaredElement.Type, 
-                                this.classDeclaration.DeclaredName, 
+                                declaredName, 
                                 propertyDataType.GetTypeElement(), 
                                 methodName);
                     }
@@ -162,7 +169,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp
                                 propertyName, 
                                 propertyDataName, 
                                 propertyDeclaration.DeclaredElement.Type, 
-                                this.classDeclaration.DeclaredName, 
+                                declaredName, 
                                 propertyDataType.GetTypeElement(), 
                                 methodName);
                     }
@@ -194,7 +201,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp
                                 propertyName, 
                                 propertyDataName, 
                                 propertyDeclaration.DeclaredElement.Type, 
-                                this.classDeclaration.DeclaredName, 
+                                declaredName, 
                                 propertyDataType.GetTypeElement(), 
                                 methodName);
                     }
@@ -207,7 +214,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp
                                 propertyName, 
                                 propertyDataName, 
                                 propertyDeclaration.DeclaredElement.Type, 
-                                this.classDeclaration.DeclaredName, 
+                                declaredName, 
                                 propertyDataType.GetTypeElement(), 
                                 methodName);
                     }
@@ -243,7 +250,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp
                         propertyName, 
                         propertyDeclaration.DeclaredElement.Type, 
                         propertyDataType.GetTypeElement(),
-                        this.classDeclaration.DeclaredName);
+                        declaredName);
             }
             else
             {
@@ -254,7 +261,7 @@ namespace Catel.ReSharper.CatelProperties.CSharp
                         propertyName, 
                         propertyDeclaration.DeclaredElement.Type, 
                         propertyDataType.GetTypeElement(),
-                        this.classDeclaration.DeclaredName);
+                        declaredName);
             }
 
             // context.PutMemberDeclaration(propertyDataMemberDeclaration, null, declaration => new GeneratorDeclarationElement(declaration));
