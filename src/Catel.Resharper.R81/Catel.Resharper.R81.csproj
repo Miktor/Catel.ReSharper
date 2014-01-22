@@ -249,9 +249,6 @@
       <Link>Actions.xml</Link>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Fody_ToBeDeleted.txt" />
-  </ItemGroup>
   <!--
   <PropertyGroup>
     <ReSharperSdkTargets Condition=" '$(ReSharperSdkTargets)' == '' ">$(MSBuildExtensionsPath)\JetBrains\ReSharper.SDK\v8.1</ReSharperSdkTargets>
