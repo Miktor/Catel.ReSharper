@@ -10,7 +10,7 @@
     <iconUrl>https://raw.github.com/Catel/Catel.ReSharper/master/design/CatelR%232.png</iconUrl>
     <tags>Catel Plugin</tags>
     <dependencies>
-      <dependency id="ReSharper" version="8.0" />
+      <dependency id="ReSharper" version="[8.0, 8.2)" />
     </dependencies>
   </metadata>
 </package>
