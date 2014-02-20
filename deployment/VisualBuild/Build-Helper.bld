@@ -6,6 +6,7 @@
 		</step>
 		<step action='Git'>
 			<Command>rev-list  --count HEAD</Command>
+			<Exe>c:\Program Files (x86)\Git\bin\git.exe</Exe>
 			<WorkDir>%PROJDIR%\..\..\</WorkDir>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>1</indent>

@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Resharper.R80", "Cate
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Resharper.R81", "Catel.Resharper.R81\Catel.Resharper.R81.csproj", "{20034B76-19A9-4D3B-8FC5-5AB4FF002D97}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Resharper.R82", "Catel.Resharper.R82\Catel.Resharper.R82.csproj", "{7BD7FE56-7DDB-48C4-B21E-1B75457E577A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{20034B76-19A9-4D3B-8FC5-5AB4FF002D97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20034B76-19A9-4D3B-8FC5-5AB4FF002D97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20034B76-19A9-4D3B-8FC5-5AB4FF002D97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BD7FE56-7DDB-48C4-B21E-1B75457E577A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BD7FE56-7DDB-48C4-B21E-1B75457E577A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BD7FE56-7DDB-48C4-B21E-1B75457E577A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BD7FE56-7DDB-48C4-B21E-1B75457E577A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,5 +64,6 @@ Global
 		{870AA2A4-D22A-460C-A3AC-FDEE2ED1E6C2} = {EFD27AC9-C61B-4774-8667-E481EDB79F5B}
 		{41B73DE6-7587-4B2C-B16D-EF8C3D1F1B2C} = {EFD27AC9-C61B-4774-8667-E481EDB79F5B}
 		{20034B76-19A9-4D3B-8FC5-5AB4FF002D97} = {EFD27AC9-C61B-4774-8667-E481EDB79F5B}
+		{7BD7FE56-7DDB-48C4-B21E-1B75457E577A} = {EFD27AC9-C61B-4774-8667-E481EDB79F5B}
 	EndGlobalSection
 EndGlobal
