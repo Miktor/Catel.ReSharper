@@ -21,6 +21,7 @@ Version 1.4.1
 Added/fixed:
 ============
 (+) CTL-304 Added support for ReSharper v8.1.
+(+) Added support for ReSharper v8.2 EAP.
 (+) Added support for VS2013.
 (+) Expose model properties generation works in view model hierarchies.
 (-) Removed Catel.ReSharper top menu and the about dialog action.
